@@ -110,7 +110,7 @@ $ terraform apply -auto-approve -destroy
 
 - [ ] Implement an easy way to add more controllers
 - [ ] Implement an easy way to add more workers
-- [ ] The controller gets a taint that needs to be deleted (or workloads to apply a toleration)
+- [x] The controller gets a taint that needs to be deleted (or workloads to apply a toleration)
 - [ ] sysinfo complains about NAT unknown, figure it out
 - [ ] Hetzner right kinda leads us to use the root user. We apparently can use cloud-inits user-data to get away from that
 - [ ] Write more docs
