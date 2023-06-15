@@ -114,3 +114,4 @@ $ terraform apply -auto-approve -destroy
 * Use k0s's helm integration
 * Also have helm installed locally
 * Allow to set a Reverse DNS
+* Decide whether to have the ssh key in user-data or as a terraform resource. Need to evaluate how the latter interacts with cloud-init, if at all
