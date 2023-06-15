@@ -1,3 +1,5 @@
+[![Terraform](https://github.com/akosiaris/k0s_hetzner/actions/workflows/terraform.yaml/badge.svg)](https://github.com/akosiaris/k0s_hetzner/actions/workflows/terraform.yaml)
+
 # Intro
 
 This is a Proof of Concept. Use anything here at your own risk
