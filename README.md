@@ -19,6 +19,7 @@ Create a file named terraform.tfvars and put inside the Token from Hetzner's por
 ```
 hcloud_token = "API_TOKEN_HERE"
 ssh_key = "SSH_KEY_HERE"
+controller1_rdns = "rdns.example.org"
 ```
 
 Now, run the following to get the provider
@@ -115,5 +116,5 @@ $ terraform apply -auto-approve -destroy
 - [ ] Write more docs
 - [ ] Use k0s's helm integration
 - [ ] Also have helm installed locally
-- [ ] Allow to set a Reverse DNS
+- [x] Allow to set a Reverse DNS
 - [x] Decide whether to have the ssh key in user-data or as a terraform resource. Need to evaluate how the latter interacts with cloud-init, if at all

@@ -29,3 +29,15 @@ resource "hcloud_server" "controller1" {
     "role" : "controller"
   }
 }
+
+resource "hcloud_rdns" "controller1_ipv4" {
+  server_id  = hcloud_server.controller1.id
+  ip_address = hcloud_server.controller1.ipv4_address
+  dns_ptr    = var.controller1_rdns
+}
+
+resource "hcloud_rdns" "controller1_ipv6" {
+  server_id  = hcloud_server.controller1.id
+  ip_address = hcloud_server.controller1.ipv6_address
+  dns_ptr    = var.controller1_rdns
+}

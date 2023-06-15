@@ -8,3 +8,8 @@ variable "ssh_key" {
   type        = string
   description = "SSH key for connecting to servers"
 }
+
+variable "controller1_rdns" {
+  type        = string
+  description = "Reverse PTR"
+}
