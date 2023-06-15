@@ -43,4 +43,4 @@ jobs:
 
     # Generates an execution plan for Terraform
     - name: Terraform Plan
-      run: terraform plan -input=false
+      run: terraform plan -var 'hcloud_token=ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff'
