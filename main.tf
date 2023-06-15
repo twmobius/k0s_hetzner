@@ -3,6 +3,11 @@ provider "hcloud" {
   token = var.hcloud_token
 }
 
+resource "hcloud_ssh_key" "default" {
+  name       = "hetzner"
+  public_key = var.ssh_key
+}
+
 # Create a new server running debian
 resource "hcloud_server" "controller1" {
   name = "controller1"
@@ -13,6 +18,9 @@ resource "hcloud_server" "controller1" {
   # Only falkenstein has arm64 for now
   location  = "fsn1"
   user_data = file("user-data")
+  ssh_keys = [
+    hcloud_ssh_key.default.id
+  ]
   public_net {
     ipv4_enabled = true
     ipv6_enabled = true

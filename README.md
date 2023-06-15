@@ -13,13 +13,12 @@ Create a new SSH key
 $ ssh-keygen -t ed25519 -f id_ed25519_k0s_hetzner_poc
 ```
 
-Edit user-data file and where it says #REPLACEME# put your public key
-
 Now, go to [Hetzner Cloud console](console.hetzner.cloud), create project, go to security, create an API token
 
-Create a file named terraform.tfvars and put inside the Token from Hetzner's portal. This file is git-ignored
+Create a file named terraform.tfvars and put inside the Token from Hetzner's portal and the public key as below. Note that this file is git-ignored
 ```
 hcloud_token = "API_TOKEN_HERE"
+ssh_key = "SSH_KEY_HERE"
 ```
 
 Now, run the following to get the provider
@@ -108,11 +107,11 @@ $ terraform apply -auto-approve -destroy
 
 # TODO
 
-* The controller gets a taint that needs to be deleted (or workloads to apply a toleration)
-* sysinfo complains about NAT unknown, figure it out
-* Hetzner right kinda leads us to use the root user. We apparently can use cloud-inits user-data to get away from that
-* Write more docs
-* Use k0s's helm integration
-* Also have helm installed locally
-* Allow to set a Reverse DNS
-* Decide whether to have the ssh key in user-data or as a terraform resource. Need to evaluate how the latter interacts with cloud-init, if at all
+- [ ] The controller gets a taint that needs to be deleted (or workloads to apply a toleration)
+- [ ] sysinfo complains about NAT unknown, figure it out
+- [ ] Hetzner right kinda leads us to use the root user. We apparently can use cloud-inits user-data to get away from that
+- [ ] Write more docs
+- [ ] Use k0s's helm integration
+- [ ] Also have helm installed locally
+- [ ] Allow to set a Reverse DNS
+- [x] Decide whether to have the ssh key in user-data or as a terraform resource. Need to evaluate how the latter interacts with cloud-init, if at all

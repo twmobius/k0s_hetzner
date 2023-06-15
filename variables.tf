@@ -3,3 +3,8 @@ variable "hcloud_token" {
   description = "Value of the Hetzner token"
   type        = string
 }
+
+variable "ssh_key" {
+  type        = string
+  description = "SSH key for connecting to servers"
+}

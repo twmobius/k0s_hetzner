@@ -22,8 +22,6 @@ ssh_pwauth: false
 # beginning anyway and we disallow SSHing with a password
 chpasswd:
   expire: False
-ssh_authorized_keys:
-  - #REPLACEME#
 timezone: Europe/Athens
 # Add some locales and make sure we don't use iptables-nft, it still is a mess
 # with kubernetes
