@@ -43,4 +43,4 @@ jobs:
 
     # Generates an execution plan for Terraform
     - name: Terraform Plan
-      run: terraform plan -input=false -var 'ssh_key=foo' -var 'controller1_rdns=c1.example.org'  -var 'hcloud_token=ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff'
+      run: terraform plan -input=false -var-file 'ci.tfvars'
