@@ -12,7 +12,7 @@ resource "hcloud_ssh_key" "default" {
 resource "hcloud_server" "controller1" {
   name = "controller1"
   # arm64 machine
-  server_type = "cax11"
+  server_type = var.hcloud_server_type
   # TODO: Bump to 12 once it's available
   image = "debian-11"
   # Only falkenstein has arm64 for now
