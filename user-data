@@ -16,6 +16,21 @@ package_reboot_if_required: true
 packages:
   - ferm
   - curl
+# Pre-populate (before ferm is even installed) ferm configuration file to allow
+# accessing the API
+write_files:
+  - path: /etc/ferm/ferm.d/k8s-api
+    permissions: "0640"
+    owner: "root:root"
+    content: |
+      domain (ip ip6) {
+        table filter {
+          chain INPUT {
+            # allow k8s api connections
+            proto tcp dport 6443 ACCEPT;
+          }
+        }
+      }
 # Don't allow SSH password auth, only ssh keys
 ssh_pwauth: false
 # Don't expire passwords, hetzner is creating a very strong one at the
