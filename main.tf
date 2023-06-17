@@ -16,7 +16,7 @@ resource "hcloud_server" "controller1" {
   # TODO: Bump to 12 once it's available
   image = "debian-11"
   # Only falkenstein has arm64 for now
-  location  = "fsn1"
+  location  = var.hcloud_server_location
   user_data = file("user-data")
   ssh_keys = [
     hcloud_ssh_key.default.id

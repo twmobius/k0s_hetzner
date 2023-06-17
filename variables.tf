@@ -14,6 +14,16 @@ variable "hcloud_server_type" {
   }
 }
 
+variable "hcloud_server_location" {
+  type        = string
+  description = "The Hetzner cloud server location. Values: fsn1"
+  default     = "fsn1"
+  validation {
+    condition     = can(regex("fsn1", var.hcloud_server_location))
+    error_message = "Unsupported server location provided"
+  }
+}
+
 variable "ssh_key" {
   type        = string
   description = "SSH key for connecting to servers"
