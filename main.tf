@@ -14,7 +14,7 @@ resource "hcloud_server" "controller1" {
   # arm64 machine
   server_type = var.hcloud_server_type
   # TODO: Bump to 12 once it's available
-  image = "debian-11"
+  image = var.hcloud_server_image
   # Only falkenstein has arm64 for now
   location  = var.hcloud_server_location
   user_data = file("user-data")
@@ -26,6 +26,7 @@ resource "hcloud_server" "controller1" {
     ipv6_enabled = true
   }
   labels = {
+    # TODO: These are arbitrary hetzner labels. Figure out a use for them
     "role" : "controller"
   }
 }

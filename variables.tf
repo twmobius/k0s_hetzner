@@ -14,6 +14,16 @@ variable "hcloud_server_type" {
   }
 }
 
+variable "hcloud_server_image" {
+  type        = string
+  description = "The Hetzner cloud server image. Values: debian-11, debian-12"
+  default     = "debian-11"
+  validation {
+    condition     = can(regex("debian-1[12]", var.hcloud_server_image))
+    error_message = "Unsupported server image provided"
+  }
+}
+
 variable "hcloud_server_location" {
   type        = string
   description = "The Hetzner cloud server location. Values: fsn1"
