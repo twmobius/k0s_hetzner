@@ -37,9 +37,15 @@ variable "hcloud_server_location" {
   }
 }
 
-variable "ssh_key" {
+variable "ssh_pub_key" {
   type        = string
-  description = "SSH key for connecting to servers"
+  description = "Public SSH key for connecting to servers"
+}
+
+variable "ssh_priv_key_path" {
+  type        = string
+  description = "The private part of the above"
+  sensitive   = true
 }
 
 variable "domain" {

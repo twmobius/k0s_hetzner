@@ -1,3 +1,4 @@
-hcloud_token = "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
-ssh_key      = "foo"
-domain       = "example.com"
+hcloud_token      = "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+ssh_pub_key       = "foo"
+ssh_priv_key_path = "foo"
+domain            = "example.com"

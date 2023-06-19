@@ -5,7 +5,7 @@ provider "hcloud" {
 
 resource "hcloud_ssh_key" "default" {
   name       = "hetzner"
-  public_key = var.ssh_key
+  public_key = var.ssh_pub_key
 }
 
 # Create a new server running debian
