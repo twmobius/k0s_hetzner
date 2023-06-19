@@ -12,6 +12,7 @@ package_update: true
 package_upgrade: true
 package_reboot_if_required: true
 # Install ferm for firewalling purposes, standard ferm firewalling is pretty strict
+# TODO: Figure out a way to open up ports for other nodes in the cluster
 # Install curl cause we 'll need it later
 packages:
   - ferm
@@ -47,13 +48,3 @@ bootcmd:
   - [ update-alternatives, --set, iptables, /usr/sbin/iptables-legacy ]
 # Set a decent locale. TODO: Actually evaluate whether we want one of the above locales
 locale: C.UTF-8
-# Setup k0s. TODO: This is insecure, but ok for a PoC. If we are to productionize
-# this, we need to make sure we distribute the k0s binary in a proper way
-runcmd:
-  - [ curl, -o, k0s.sh, -sSLf, https://get.k0s.sh]
-  - [ sh, k0s.sh ]
-  - [ mkdir, -p, /etc/k0s ]
-  - k0s config create > /etc/k0s/k0s.yaml
-  - [ k0s, config, validate, --config, /etc/k0s/k0s.yaml ]
-  - [ k0s, install, controller, -c, /etc/k0s/k0s.yaml, --enable-worker, --no-taints ]
-  - [ k0s, start ]

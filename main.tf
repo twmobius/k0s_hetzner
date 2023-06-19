@@ -42,3 +42,23 @@ resource "hcloud_rdns" "controller_ipv6" {
   ip_address = hcloud_server.controller[count.index].ipv6_address
   dns_ptr    = format("%s.%s", hcloud_server.controller[count.index].name, var.domain)
 }
+
+resource "k0s_cluster" "k0s1" {
+  name    = var.domain
+  version = "v1.27.2+k0s.0-amd64"
+
+  hosts = [
+    for ipv6 in hcloud_server.controller.*.ipv6_address :
+    {
+      role      = "controller+worker"
+      no_taints = true
+      # install_flags = ""
+      ssh = {
+        address  = ipv6
+        port     = 22
+        user     = "root"
+        key_path = var.ssh_priv_key_path
+      }
+    }
+  ]
+}

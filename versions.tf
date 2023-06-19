@@ -9,5 +9,9 @@ terraform {
       source  = "hashicorp/helm"
       version = "2.10.1"
     }
+    k0s = {
+      source  = "alessiodionisi/k0s"
+      version = "0.1.0"
+    }
   }
 }
