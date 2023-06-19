@@ -8,7 +8,7 @@ variable "hcloud_server_type" {
   type        = string
   description = "The Hetzner cloud server type. Values: cax11, cax21, cax31, cax41 (all ARM64)"
   # arm64 machine
-  default     = "cax11"
+  default = "cax11"
   validation {
     condition     = can(regex("cax[1234]1", var.hcloud_server_type))
     error_message = "Unsupported server type provided"
@@ -19,7 +19,7 @@ variable "hcloud_server_image" {
   type        = string
   description = "The Hetzner cloud server image. Values: debian-11, debian-12"
   # TODO: Bump to 12 once it's available
-  default     = "debian-11"
+  default = "debian-11"
   validation {
     condition     = can(regex("debian-1[12]", var.hcloud_server_image))
     error_message = "Unsupported server image provided"

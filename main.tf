@@ -10,12 +10,12 @@ resource "hcloud_ssh_key" "default" {
 
 # Create a new server running debian
 resource "hcloud_server" "controller" {
-  count = var.controller_count
-  name = "controller${count.index}"
+  count       = var.controller_count
+  name        = "controller${count.index}"
   server_type = var.hcloud_server_type
-  image = var.hcloud_server_image
-  location  = var.hcloud_server_location
-  user_data = file("user-data")
+  image       = var.hcloud_server_image
+  location    = var.hcloud_server_location
+  user_data   = file("user-data")
   ssh_keys = [
     hcloud_ssh_key.default.id
   ]
