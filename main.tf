@@ -48,13 +48,13 @@ resource "k0s_cluster" "k0s1" {
   version = var.k0s_version
 
   hosts = [
-    for ipv6 in hcloud_server.controller.*.ipv6_address :
+    for address in hcloud_server.controller.*.ipv6_address :
     {
       role      = "controller+worker"
       no_taints = true
       # install_flags = ""
       ssh = {
-        address  = ipv6
+        address  = address
         port     = 22
         user     = "root"
         key_path = var.ssh_priv_key_path
