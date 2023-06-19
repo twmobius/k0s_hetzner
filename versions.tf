@@ -11,7 +11,7 @@ terraform {
     }
     k0s = {
       source  = "alessiodionisi/k0s"
-      version = "0.1.0"
+      version = "0.1.1"
     }
   }
 }
