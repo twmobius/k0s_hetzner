@@ -29,7 +29,7 @@ variable "ssh_key" {
   description = "SSH key for connecting to servers"
 }
 
-variable "controller1_rdns" {
+variable "domain" {
   type        = string
-  description = "Reverse PTR"
+  description = "The domain of all hosts. Will be used to generate all PTRs"
 }

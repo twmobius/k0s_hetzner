@@ -1,3 +1,3 @@
-hcloud_token     = "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
-ssh_key          = "foo"
-controller1_rdns = "controller1.example.org"
+hcloud_token = "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+ssh_key      = "foo"
+domain       = "example.com"

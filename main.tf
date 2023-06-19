@@ -33,11 +33,11 @@ resource "hcloud_server" "controller1" {
 resource "hcloud_rdns" "controller1_ipv4" {
   server_id  = hcloud_server.controller1.id
   ip_address = hcloud_server.controller1.ipv4_address
-  dns_ptr    = var.controller1_rdns
+  dns_ptr    = format("%s.%s", hcloud_server.controller1.name, var.domain)
 }
 
 resource "hcloud_rdns" "controller1_ipv6" {
   server_id  = hcloud_server.controller1.id
   ip_address = hcloud_server.controller1.ipv6_address
-  dns_ptr    = var.controller1_rdns
+  dns_ptr    = format("%s.%s", hcloud_server.controller1.name, var.domain)
 }
