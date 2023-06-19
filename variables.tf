@@ -58,3 +58,13 @@ variable "controller_count" {
   description = "The number of controllers. Defaults to 3"
   default     = 3
 }
+
+variable "k0s_version" {
+  type        = string
+  description = "The version of k0s to target. Default: 1.27.2+k0s.0"
+  default     = "1.27.2+k0s.0"
+  validation {
+    condition     = can(regex("1.27.2+k0s.0", var.k0s_version))
+    error_message = "Unsupported k0s version provided"
+  }
+}

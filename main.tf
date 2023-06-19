@@ -45,7 +45,7 @@ resource "hcloud_rdns" "controller_ipv6" {
 
 resource "k0s_cluster" "k0s1" {
   name    = var.domain
-  version = "v1.27.2+k0s.0-amd64"
+  version = var.k0s_version
 
   hosts = [
     for ipv6 in hcloud_server.controller.*.ipv6_address :
