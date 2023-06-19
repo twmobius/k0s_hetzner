@@ -12,11 +12,8 @@ resource "hcloud_ssh_key" "default" {
 resource "hcloud_server" "controller" {
   count = var.controller_count
   name = "controller${count.index}"
-  # arm64 machine
   server_type = var.hcloud_server_type
-  # TODO: Bump to 12 once it's available
   image = var.hcloud_server_image
-  # Only falkenstein has arm64 for now
   location  = var.hcloud_server_location
   user_data = file("user-data")
   ssh_keys = [
