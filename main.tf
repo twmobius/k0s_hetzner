@@ -9,8 +9,9 @@ resource "hcloud_ssh_key" "default" {
 }
 
 # Create a new server running debian
-resource "hcloud_server" "controller1" {
-  name = "controller1"
+resource "hcloud_server" "controller" {
+  count = var.controller_count
+  name = "controller${count.index}"
   # arm64 machine
   server_type = var.hcloud_server_type
   # TODO: Bump to 12 once it's available
@@ -31,14 +32,16 @@ resource "hcloud_server" "controller1" {
   }
 }
 
-resource "hcloud_rdns" "controller1_ipv4" {
-  server_id  = hcloud_server.controller1.id
-  ip_address = hcloud_server.controller1.ipv4_address
-  dns_ptr    = format("%s.%s", hcloud_server.controller1.name, var.domain)
+resource "hcloud_rdns" "controller_ipv4" {
+  count      = var.controller_count
+  server_id  = hcloud_server.controller[count.index].id
+  ip_address = hcloud_server.controller[count.index].ipv4_address
+  dns_ptr    = format("%s.%s", hcloud_server.controller[count.index].name, var.domain)
 }
 
-resource "hcloud_rdns" "controller1_ipv6" {
-  server_id  = hcloud_server.controller1.id
-  ip_address = hcloud_server.controller1.ipv6_address
-  dns_ptr    = format("%s.%s", hcloud_server.controller1.name, var.domain)
+resource "hcloud_rdns" "controller_ipv6" {
+  count      = var.controller_count
+  server_id  = hcloud_server.controller[count.index].id
+  ip_address = hcloud_server.controller[count.index].ipv6_address
+  dns_ptr    = format("%s.%s", hcloud_server.controller[count.index].name, var.domain)
 }

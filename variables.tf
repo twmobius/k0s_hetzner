@@ -43,3 +43,9 @@ variable "domain" {
   type        = string
   description = "The domain of all hosts. Will be used to generate all PTRs"
 }
+
+variable "controller_count" {
+  type        = number
+  description = "The number of controllers. Defaults to 3"
+  default     = 3
+}
