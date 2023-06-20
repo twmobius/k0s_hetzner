@@ -14,6 +14,7 @@ resource "hcloud_primary_ip" "worker_ipv4" {
   count         = var.worker_count
   name          = "worker_ipv4_worker${count.index}"
   type          = "ipv4"
+  datacenter    = "fsn1-dc14" # TODO: Fix this harcoded value
   assignee_type = "server"
   auto_delete   = false # Per comment in provider documentation
   labels = {
@@ -25,6 +26,7 @@ resource "hcloud_primary_ip" "worker_ipv6" {
   count         = var.worker_count
   name          = "worker_ipv6_worker${count.index}"
   type          = "ipv6"
+  datacenter    = "fsn1-dc14" # TODO: Fix this harcoded value
   assignee_type = "server"
   auto_delete   = false # Per comment in provider documentation
   labels = {

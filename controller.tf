@@ -13,6 +13,7 @@ resource "hcloud_primary_ip" "controller_ipv4" {
   count         = var.controller_role == "single" ? 1 : var.controller_count
   name          = "controller_ipv4_controller${count.index}"
   type          = "ipv4"
+  datacenter    = "fsn1-dc14" # TODO: Fix this harcoded value
   assignee_type = "server"
   auto_delete   = false # Per comment in provider documentation
   labels = {
@@ -24,6 +25,7 @@ resource "hcloud_primary_ip" "controller_ipv6" {
   count         = var.controller_role == "single" ? 1 : var.controller_count
   name          = "controller_ipv6_controller${count.index}"
   type          = "ipv6"
+  datacenter    = "fsn1-dc14" # TODO: Fix this harcoded value
   assignee_type = "server"
   auto_delete   = false # Per comment in provider documentation
   labels = {
