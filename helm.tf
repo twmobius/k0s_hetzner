@@ -6,7 +6,8 @@ provider "helm" {
 
 resource "helm_release" "cert-manager" {
   depends_on = [
-    k0s_cluster.k0s1
+    k0s_cluster.k0s1,
+    local_file.kubeconfig
   ]
   name       = "cert-manager"
   repository = "https://charts.jetstack.io"
@@ -25,7 +26,8 @@ resource "helm_release" "cert-manager" {
 
 resource "helm_release" "ingress-nginx" {
   depends_on = [
-    k0s_cluster.k0s1
+    k0s_cluster.k0s1,
+    local_file.kubeconfig
   ]
   name       = "ingress-nginx"
   repository = "https://kubernetes.github.io/ingress-nginx"
