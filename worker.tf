@@ -1,6 +1,7 @@
 # Create worker servers
 
 resource "hcloud_placement_group" "worker-pg" {
+  count = var.worker_count > 0 ? 1 : 0
   name = "worker-pg"
   type = "spread"
   labels = {
@@ -12,7 +13,7 @@ resource "hcloud_server" "worker" {
   count              = var.worker_count
   name               = "worker${count.index}"
   server_type        = var.worker_server_type
-  placement_group_id = hcloud_placement_group.worker-pg.id
+  placement_group_id = hcloud_placement_group.worker-pg[0].id
   image              = var.worker_server_image
   location           = var.worker_server_location
   user_data          = file("user-data")
