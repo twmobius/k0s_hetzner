@@ -32,3 +32,6 @@ override.tf.json
 # Ignore CLI configuration files
 .terraformrc
 terraform.rc
+
+# Ignore the created kubeconfig file, we don't want to commit it to the repo
+kubeconfig
