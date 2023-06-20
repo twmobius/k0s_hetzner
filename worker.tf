@@ -2,8 +2,8 @@
 
 resource "hcloud_placement_group" "worker-pg" {
   count = var.worker_count > 0 ? 1 : 0
-  name = "worker-pg"
-  type = "spread"
+  name  = "worker-pg"
+  type  = "spread"
   labels = {
     "role" : "worker"
   }
