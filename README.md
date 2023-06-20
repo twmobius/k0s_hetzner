@@ -25,6 +25,8 @@ ssh_priv_key_path = "path_to_priv_key_file"
 domain            = "example.com"
 ```
 
+This are the absolute necessities, look below for all the tunables that you can configure using this file
+
 Now, run the following to get the providers
 ```
 $ terraform init
@@ -114,6 +116,21 @@ Cloud isn't free and this is a PoC. Delete everything when done to avoid runaway
 ```
 $ terraform apply -auto-approve -destroy
 ```
+
+# Tunables
+
+Other settings you can set in terraform.tfvars
+
+* controller\_count - Amount of controllers. Number. Defaults to 3
+* controller\_server\_type - Hetzner's server type. Refer to controller\_variables.tf for valid values
+* controller\_server\_image - Hetzner's server image. Defaults to Debian 11. Refer to controller\_variables.tf for valid values
+* controller\_server\_location - Hetzner's server location. Defaults to Falkenstein. Refer to controller\_variables.tf for valid values
+* controller\_role - k0s controller roles. Valid values: controller, controller+worker, single
+* worker\_count - Amount of workers. Number. Defaults to 3
+* worker\_server\_type - Hetzner's server type. Refer to worker\_variables.tf for valid values
+* worker\_server\_image - Hetzner's server image. Defaults to Debian 11. Refer to worker\_variables.tf for valid values
+* worker\_server\_location - Hetzner's server location. Defaults to Falkenstein. Refer to worker\_variables.tf for valid values
+* k0s\_version - The k0s version to target. Valid values: 1.27.2+k0s.0 for now
 
 # TODO
 
