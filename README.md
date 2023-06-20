@@ -44,7 +44,7 @@ $ terraform plan
 
 Once you are sure that the demons have been exorcised create the resources
 ```
-$ terraform apply -auto-approve
+$ SSH_KNOWN_HOSTS=/dev/null terraform apply -auto-approve
 ```
 
 Wait for the output and fetch the IPv6 and IPv4 addresses. Based on what you have of the 2, ssh to the node.
