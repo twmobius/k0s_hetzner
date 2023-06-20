@@ -17,6 +17,7 @@ resource "k0s_cluster" "k0s1" {
       for address in hcloud_server.controller.*.ipv4_address :
       {
         role        = var.controller_role
+        no_taints   = var.controller_role == "controller+worker" ? true : false
         environment = { "ROLE" = var.controller_role }
         ssh = {
           address  = address
