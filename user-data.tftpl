@@ -48,5 +48,6 @@ bootcmd:
   - echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen
   - [ locale-gen ]
   - [ update-alternatives, --set, iptables, /usr/sbin/iptables-legacy ]
+  - [ update-alternatives, --set, ip6tables, /usr/sbin/ip6tables-legacy ]
 # Set a decent locale. TODO: Actually evaluate whether we want one of the above locales
 locale: C.UTF-8
