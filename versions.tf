@@ -5,6 +5,10 @@ terraform {
       source  = "hetznercloud/hcloud"
       version = "1.40.0"
     }
+    local = {
+      source  = "hashicorp/local"
+      version = "2.4.0"
+    }
     helm = {
       source  = "hashicorp/helm"
       version = "2.10.1"

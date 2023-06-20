@@ -42,3 +42,8 @@ resource "k0s_cluster" "k0s1" {
     ]
   )
 }
+
+resource "local_file" "kubeconfig" {
+  filename = "kubeconfig"
+  content  = nonsensitive(k0s_cluster.k0s1.kubeconfig)
+}
