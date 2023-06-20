@@ -20,11 +20,12 @@ Now, go to [Hetzner Cloud console](console.hetzner.cloud), create project, go to
 Create a file named terraform.tfvars and put inside the Token from Hetzner's portal and the public key as below. Note that this file is git-ignored
 ```
 hcloud_token = "API_TOKEN_HERE"
-ssh_key = "SSH_KEY_HERE"
-controller1_rdns = "rdns.example.org"
+ssh_pub_key = "SSH_KEY_HERE"
+ssh_priv_key_path = "path_to_priv_key_file"
+domain            = "example.com"
 ```
 
-Now, run the following to get the provider
+Now, run the following to get the providers
 ```
 $ terraform init
 ```
@@ -45,7 +46,7 @@ $ terraform apply -auto-approve
 ```
 
 Wait for the output and fetch the IPv6 and IPv4 addresses. Based on what you have of the 2, ssh to the node.
-Note that I am on purpose redirecting to /dev/null the key as I don't want to keep it around for this PoC.
+Note that I am on purpose redirecting to /dev/null the host key as I don't want to keep it around for this PoC.
 
 ```
 ssh -o UserKnownHostsFile=/dev/null -i ~/.ssh/id_ed25519_k0s_hetzner_poc root@<ip_address>
@@ -70,6 +71,11 @@ List namespaces
 # k0s kubectl get ns
 ```
 
+If you have kubectl (or any other compatible kubernetes client, e.g. Lens,
+Helm) locally, there is kubeconfig file saved in the root of the repo after a
+successful apply, use it at your discretion.
+Note: This file provides FULL access to the cluster. Don't mishandle it
+
 ### Deploy a basic pod
 
 ```
@@ -92,7 +98,8 @@ Restore the above
 # k0s backup backup/<file_name>
 ```
 
-Check the system
+Check the system. Note the IPv4/IPv6 conntrack/nat warnings are expected for
+kernels past 4.19 and 5.1 respectively
 ```
 # k0s sysinfo | grep -v pass
 ```
@@ -114,9 +121,10 @@ $ terraform apply -auto-approve -destroy
 - [x] Implement an easy way to add more workers
 - [x] The controller gets a taint that needs to be deleted (or workloads to apply a toleration)
 - [x] sysinfo complains about NAT unknown, figure it out. #1
-- [ ] Hetzner right kinda leads us to use the root user. We apparently can use cloud-inits user-data to get away from that
-- [ ] Write more docs
-- [ ] Use k0s's helm integration
-- [ ] Also have helm installed locally
+- [x] Evaluate using k0s's helm integration
 - [x] Allow to set a Reverse DNS
 - [x] Decide whether to have the ssh key in user-data or as a terraform resource. Need to evaluate how the latter interacts with cloud-init, if at all
+- [ ] Support Hetzner "private" networks
+- [ ] Support vswitch type in Hetzner "private" networks
+- [ ] Hetzner right kinda leads us to use the root user. We apparently can use cloud-inits user-data to get away from that
+- [ ] Write more docs
