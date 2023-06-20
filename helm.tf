@@ -12,6 +12,7 @@ resource "helm_release" "cert-manager" {
   name       = "cert-manager"
   repository = "https://charts.jetstack.io"
   chart      = "cert-manager"
+  namespace  = "kube-system"
   version    = "1.12.0"
 
   set {
@@ -32,6 +33,7 @@ resource "helm_release" "ingress-nginx" {
   name       = "ingress-nginx"
   repository = "https://kubernetes.github.io/ingress-nginx"
   chart      = "ingress-nginx"
+  namespace  = "kube-system"
   version    = "4.7.0"
 
   set {
