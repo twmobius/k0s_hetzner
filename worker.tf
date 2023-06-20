@@ -40,7 +40,17 @@ resource "hcloud_server" "worker" {
   placement_group_id = hcloud_placement_group.worker-pg[0].id
   image              = var.worker_server_image
   location           = var.worker_server_location
-  user_data          = file("user-data")
+  user_data = templatefile(
+    "user-data.tftpl",
+    { ip_addresses = join(" ",
+      concat(
+        hcloud_primary_ip.controller_ipv4.*.ip_address,
+        hcloud_primary_ip.controller_ipv6.*.ip_address,
+        hcloud_primary_ip.worker_ipv4.*.ip_address,
+        hcloud_primary_ip.worker_ipv6.*.ip_address,
+      ))
+    }
+  )
   ssh_keys = [
     hcloud_ssh_key.default.id
   ]

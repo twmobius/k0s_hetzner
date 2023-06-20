@@ -29,6 +29,8 @@ write_files:
           chain INPUT {
             # allow k8s api connections
             proto tcp dport 6443 ACCEPT;
+            # allow konnectivity/k0s api/etcd peers services
+            saddr (${ip_addresses}) proto tcp dport (8132 9443 2380) ACCEPT;
           }
         }
       }
