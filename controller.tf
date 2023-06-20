@@ -9,7 +9,7 @@ resource "hcloud_placement_group" "controller-pg" {
 }
 
 resource "hcloud_server" "controller" {
-  count              = var.controller_count
+  count              = var.controller_role == "single" ? 1 : var.controller_count
   name               = "controller${count.index}"
   server_type        = var.controller_server_type
   placement_group_id = hcloud_placement_group.controller-pg.id

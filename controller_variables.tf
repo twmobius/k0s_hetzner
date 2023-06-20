@@ -39,10 +39,10 @@ variable "controller_server_location" {
 
 variable "controller_role" {
   type        = string
-  description = "The k0s role for a controller. Values: controller, controller+worker"
+  description = "The k0s role for a controller. Values: controller, controller+worker, single"
   default     = "controller"
   validation {
-    condition     = can(regex("controller|controller+worker", var.controller_role))
+    condition     = can(regex("controller|controller+worker|single", var.controller_role))
     error_message = "Unsupported controller role"
   }
 }
