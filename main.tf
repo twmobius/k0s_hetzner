@@ -12,18 +12,32 @@ resource "k0s_cluster" "k0s1" {
   name    = var.domain
   version = var.k0s_version
 
-  hosts = [
-    for address in hcloud_server.controller.*.ipv6_address :
-    {
-      role      = "controller+worker"
-      no_taints = true
-      # install_flags = ""
-      ssh = {
-        address  = address
-        port     = 22
-        user     = "root"
-        key_path = var.ssh_priv_key_path
+  hosts = concat(
+    [
+      for address in hcloud_server.controller.*.ipv4_address :
+      {
+        role        = var.controller_role
+        environment = { "ROLE" = var.controller_role }
+        ssh = {
+          address  = address
+          port     = 22
+          user     = "root"
+          key_path = var.ssh_priv_key_path
+        }
       }
-    }
-  ]
+    ],
+    [
+      for address in hcloud_server.worker.*.ipv4_address :
+      {
+        role        = "worker"
+        environment = { "ROLE" = "worker" }
+        ssh = {
+          address  = address
+          port     = 22
+          user     = "root"
+          key_path = var.ssh_priv_key_path
+        }
+      }
+    ]
+  )
 }
