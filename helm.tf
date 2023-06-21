@@ -41,7 +41,12 @@ resource "helm_release" "ingress-nginx" {
     value = "NodePort"
   }
   set_list {
-    name  = "controller.service.externalIPs"
-    value = hcloud_server.worker.*.ipv4_address
+    name = "controller.service.externalIPs"
+    value = var.controller_role == "single" ? concat(
+      hcloud_server.controller.*.ipv4_address,
+      hcloud_server.controller.*.ipv6_address) : concat(
+      hcloud_server.worker.*.ipv4_address,
+      hcloud_server.worker.*.ipv6_address,
+    )
   }
 }
