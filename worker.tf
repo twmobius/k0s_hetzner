@@ -1,8 +1,9 @@
 # Spread out for great chance a Hetzner outage doesn't impact us
 resource "hcloud_placement_group" "worker-pg" {
-  count = var.worker_count > 0 ? 1 : 0
-  name  = "worker-pg"
-  type  = "spread"
+  count = var.controller_role == "single" ? 0 : (
+  var.worker_count > 0 ? 1 : 0)
+  name = "worker-pg"
+  type = "spread"
   labels = {
     "role" : "worker"
   }
@@ -11,7 +12,7 @@ resource "hcloud_placement_group" "worker-pg" {
 # Create Primary IPs for servers. We need this to happen in a different step
 # from creating the servers in order to populate ferm
 resource "hcloud_primary_ip" "worker_ipv4" {
-  count         = var.worker_count
+  count         = var.controller_role == "single" ? 0 : var.worker_count
   name          = "worker_ipv4_worker${count.index}"
   type          = "ipv4"
   datacenter    = var.worker_server_datacenter
@@ -23,7 +24,7 @@ resource "hcloud_primary_ip" "worker_ipv4" {
 }
 
 resource "hcloud_primary_ip" "worker_ipv6" {
-  count         = var.worker_count
+  count         = var.controller_role == "single" ? 0 : var.worker_count
   name          = "worker_ipv6_worker${count.index}"
   type          = "ipv6"
   datacenter    = var.worker_server_datacenter
@@ -36,7 +37,7 @@ resource "hcloud_primary_ip" "worker_ipv6" {
 
 # Create workers and link them to the above IPs
 resource "hcloud_server" "worker" {
-  count              = var.worker_count
+  count              = var.controller_role == "single" ? 0 : var.worker_count
   name               = "worker${count.index}"
   server_type        = var.worker_server_type
   placement_group_id = hcloud_placement_group.worker-pg[0].id
@@ -69,14 +70,14 @@ resource "hcloud_server" "worker" {
 
 # DNS Reverse RRs
 resource "hcloud_rdns" "worker_ipv4" {
-  count         = var.worker_count
+  count         = var.controller_role == "single" ? 0 : var.worker_count
   primary_ip_id = hcloud_primary_ip.worker_ipv4[count.index].id
   ip_address    = hcloud_primary_ip.worker_ipv4[count.index].ip_address
   dns_ptr       = format("%s.%s", hcloud_server.worker[count.index].name, var.domain)
 }
 
 resource "hcloud_rdns" "worker_ipv6" {
-  count         = var.worker_count
+  count         = var.controller_role == "single" ? 0 : var.worker_count
   primary_ip_id = hcloud_primary_ip.worker_ipv6[count.index].id
   ip_address    = hcloud_primary_ip.worker_ipv6[count.index].ip_address
   dns_ptr       = format("%s.%s", hcloud_server.worker[count.index].name, var.domain)
