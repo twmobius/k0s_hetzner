@@ -45,12 +45,13 @@ resource "hcloud_server" "worker" {
   location           = var.worker_server_location
   user_data = templatefile(
     "user-data.tftpl",
-    { ip_addresses = join(" ", sort(
-      concat(
-        hcloud_primary_ip.controller_ipv4.*.ip_address,
-        hcloud_primary_ip.controller_ipv6.*.ip_address,
-        hcloud_primary_ip.worker_ipv4.*.ip_address,
-        hcloud_primary_ip.worker_ipv6.*.ip_address,
+    { fqdn = format("%s%s.%s", "worker", count.index, var.domain),
+      ip_addresses = join(" ", sort(
+        concat(
+          hcloud_primary_ip.controller_ipv4.*.ip_address,
+          hcloud_primary_ip.controller_ipv6.*.ip_address,
+          hcloud_primary_ip.worker_ipv4.*.ip_address,
+          hcloud_primary_ip.worker_ipv6.*.ip_address,
       )))
     }
   )
