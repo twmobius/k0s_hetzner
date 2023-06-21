@@ -68,7 +68,7 @@ resource "hcloud_server" "controller" {
 
 # DNS Reverse RRs
 resource "hcloud_rdns" "controller_ipv4" {
-  count         = var.controller_count
+  count         = var.controller_role == "single" ? 1 : var.controller_count
   primary_ip_id = hcloud_primary_ip.controller_ipv4[count.index].id
   ip_address    = hcloud_primary_ip.controller_ipv4[count.index].ip_address
   dns_ptr = (var.controller_role == "single" ?
@@ -78,7 +78,7 @@ resource "hcloud_rdns" "controller_ipv4" {
 }
 
 resource "hcloud_rdns" "controller_ipv6" {
-  count         = var.controller_count
+  count         = var.controller_role == "single" ? 1 : var.controller_count
   primary_ip_id = hcloud_primary_ip.controller_ipv6[count.index].id
   ip_address    = hcloud_primary_ip.controller_ipv6[count.index].ip_address
   dns_ptr = (var.controller_role == "single" ?
