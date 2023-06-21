@@ -3,7 +3,7 @@ resource "hcloud_placement_group" "controller-pg" {
   name = "controller-pg"
   type = "spread"
   labels = {
-    "role" : var.controller_role
+    "role" : replace(var.controller_role, "+", "-")
   }
 }
 
@@ -17,7 +17,7 @@ resource "hcloud_primary_ip" "controller_ipv4" {
   assignee_type = "server"
   auto_delete   = false # Per comment in provider documentation
   labels = {
-    "role" : var.controller_role
+    "role" : replace(var.controller_role, "+", "-")
   }
 }
 
@@ -29,7 +29,7 @@ resource "hcloud_primary_ip" "controller_ipv6" {
   assignee_type = "server"
   auto_delete   = false # Per comment in provider documentation
   labels = {
-    "role" : var.controller_role
+    "role" : replace(var.controller_role, "+", "-")
   }
 }
 
@@ -62,7 +62,7 @@ resource "hcloud_server" "controller" {
     ipv6         = hcloud_primary_ip.controller_ipv6[count.index].id
   }
   labels = {
-    "role" : var.controller_role
+    "role" : replace(var.controller_role, "+", "-")
   }
 }
 
