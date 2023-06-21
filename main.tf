@@ -44,7 +44,7 @@ resource "k0s_cluster" "k0s1" {
 }
 
 resource "local_file" "kubeconfig" {
-  filename        = "kubeconfig"
+  filename        = "kubeconfig-${var.domain}"
   file_permission = "0600"
   content         = nonsensitive(k0s_cluster.k0s1.kubeconfig)
 }
