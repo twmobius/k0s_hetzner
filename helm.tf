@@ -40,4 +40,8 @@ resource "helm_release" "ingress-nginx" {
     name  = "controller.service.type"
     value = "NodePort"
   }
+  set_list {
+    name  = "controller.service.externalIPs"
+    value = hcloud_server.worker.*.ipv4_address
+  }
 }
