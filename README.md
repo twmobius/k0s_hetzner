@@ -56,6 +56,11 @@ ssh -o UserKnownHostsFile=/dev/null -i ~/.ssh/id_ed25519_k0s_hetzner_poc root@<i
 
 ## k0s usage
 
+There are 2 ways to use the cluster. Internally, using the tooling provided by
+k0s itself, or via the kubeconfig file and standard tooling
+
+### Internal use
+
 k0s is distribution of Kubernetes that has some interesting properties. Some basic commands:
 
 List nodes
@@ -73,20 +78,43 @@ List namespaces
 # k0s kubectl get ns
 ```
 
-If you have kubectl (or any other compatible kubernetes client, e.g. Lens,
-Helm) locally, there is kubeconfig file saved in the root of the repo after a
-successful apply, use it at your discretion.
-Note: This file provides FULL access to the cluster. Don't mishandle it
-
-### Deploy a basic pod
+Deploy a basic pod
 
 ```
 # k0s kubectl run nginx --image=nginx
 ```
 
-### Deploy using helm
+Delete pods
+```
+# k0s kubectl delete pods --all
+```
 
-TBD
+And so on.
+
+### Standard tooling
+
+If you have kubectl (or any other compatible kubernetes client, e.g. Lens,
+Helm) locally, there is kubeconfig file saved in the root of the repo after a
+successful apply, use it at your discretion.
+Note: This file provides FULL access to the cluster. Don't mishandle it
+
+#### Standard kubectl
+
+Make sure you have a compatible kubectl version around. Following kubectl skew
+policy, you can utilize a kubectl 1 version newer or older of whatever the
+cluster is
+
+```
+KUBECONFIG=kubeconfig kubectl get nodes -o wide
+```
+
+#### Deploy using helm
+
+This assumes you know your way around basic helm usage
+
+```
+KUBECONFIG=kubeconfig helm install <name> <chart>
+```
 
 ### k0s admin notes
 Backup the configuration of k0s
@@ -108,13 +136,20 @@ kernels past 4.19 and 5.1 respectively
 
 ### Add workers/controllers
 
-TBD
+Just increase controller\_count or worker\_count and run
+```
+$ SSH_KNOWN_HOSTS=/dev/null terraform apply -auto-approve
+```
 
-# Removal of resources
+### Remove workers/controllers
+
+Not supported right now
+
+# Full Removal of ALL resources
 
 Cloud isn't free and this is a PoC. Delete everything when done to avoid runaway costs
 ```
-$ terraform apply -auto-approve -destroy
+$ SSH_KNOWN_HOSTS=/dev/null terraform apply -auto-approve -destroy
 ```
 
 # Tunables
@@ -126,6 +161,7 @@ Other settings you can set in terraform.tfvars
 * controller\_server\_image - Hetzner's server image. Defaults to Debian 11. Refer to controller\_variables.tf for valid values
 * controller\_server\_location - Hetzner's server location. Defaults to Falkenstein. Refer to controller\_variables.tf for valid values
 * controller\_role - k0s controller roles. Valid values: controller, controller+worker, single
+* single\_controller\_name - Single controller name. If you use this, it's probably a pet for you. Name it? Default: darkstar
 * worker\_count - Amount of workers. Number. Defaults to 3
 * worker\_server\_type - Hetzner's server type. Refer to worker\_variables.tf for valid values
 * worker\_server\_image - Hetzner's server image. Defaults to Debian 11. Refer to worker\_variables.tf for valid values
@@ -144,5 +180,5 @@ Other settings you can set in terraform.tfvars
 - [ ] Support Hetzner "private" networks
 - [ ] Support vswitch type in Hetzner "private" networks
 - [ ] Evaluate/support [Hetzner's cloud controller manager](https://github.com/hetznercloud/hcloud-cloud-controller-manager)
-- [ ] Hetzner right kinda leads us to use the root user. We apparently can use cloud-inits user-data to get away from that
-- [ ] Write more docs
+- [x] Hetzner right kinda leads us to use the root user. We apparently can use cloud-inits user-data to get away from that. Apparently it won't help much, stick with what we got
+- [x] Write more docs
