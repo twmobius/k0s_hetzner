@@ -37,6 +37,16 @@ variable "controller_server_location" {
   }
 }
 
+variable "controller_server_datacenter" {
+  type        = string
+  description = "The Hetzner datacenter name to create the server in. Values: nbg1-dc3, fsn1-dc14, hel1-dc2, ash-dc1 or hil-dc1"
+  default     = "fsn1-dc14"
+  validation {
+    condition     = can(regex("\\w{1,}-dc[0-9]{1,}", var.controller_server_datacenter))
+    error_message = "Unsupported datacenter provided"
+  }
+}
+
 variable "controller_role" {
   type        = string
   description = "The k0s role for a controller. Values: controller, controller+worker, single"
