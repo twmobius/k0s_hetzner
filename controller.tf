@@ -36,7 +36,7 @@ resource "hcloud_primary_ip" "controller_ipv6" {
 # Create the controllers and link them to the above IPs
 resource "hcloud_server" "controller" {
   count              = var.controller_role == "single" ? 1 : var.controller_count
-  name               = "controller${count.index}"
+  name               = var.controller_role == "single" ? var.single_controller_name : "controller${count.index}"
   server_type        = var.controller_server_type
   placement_group_id = hcloud_placement_group.controller-pg.id
   image              = var.controller_server_image
@@ -68,15 +68,21 @@ resource "hcloud_server" "controller" {
 
 # DNS Reverse RRs
 resource "hcloud_rdns" "controller_ipv4" {
-  count         = var.controller_count
+  count         = var.controller_role == "single" ? 1 : var.controller_count
   primary_ip_id = hcloud_primary_ip.controller_ipv4[count.index].id
   ip_address    = hcloud_primary_ip.controller_ipv4[count.index].ip_address
-  dns_ptr       = format("%s.%s", hcloud_server.controller[count.index].name, var.domain)
+  dns_ptr = (var.controller_role == "single" ?
+    format("%s.%s", var.single_controller_name, var.domain) :
+    format("%s.%s", hcloud_server.controller[count.index].name, var.domain)
+  )
 }
 
 resource "hcloud_rdns" "controller_ipv6" {
-  count         = var.controller_count
+  count         = var.controller_role == "single" ? 1 : var.controller_count
   primary_ip_id = hcloud_primary_ip.controller_ipv6[count.index].id
   ip_address    = hcloud_primary_ip.controller_ipv6[count.index].ip_address
-  dns_ptr       = format("%s.%s", hcloud_server.controller[count.index].name, var.domain)
+  dns_ptr = (var.controller_role == "single" ?
+    format("%s.%s", var.single_controller_name, var.domain) :
+    format("%s.%s", hcloud_server.controller[count.index].name, var.domain)
+  )
 }

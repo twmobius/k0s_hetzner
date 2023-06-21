@@ -43,4 +43,8 @@ jobs:
 
     # Generates an execution plan for Terraform
     - name: Terraform Plan
-      run: terraform plan -input=false -var-file 'ci.tfvars'
+      run: |
+        terraform plan -input=false -var-file '.fixtures/defaults.tfvars'
+        terraform plan -input=false -var-file '.fixtures/single.tfvars'
+        #terraform plan -input=false -var-file '.fixtures/both.tfvars'
+        #terraform plan -input=false -var-file '.fixtures/both_no_workers.tfvars'
