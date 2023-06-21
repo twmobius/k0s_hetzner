@@ -46,3 +46,9 @@ variable "controller_role" {
     error_message = "Unsupported controller role"
   }
 }
+
+variable "single_controller_name" {
+  type        = string
+  description = "If you are deploying a single role, it's probably a pet. Name it"
+  default     = "darkstar"
+}
