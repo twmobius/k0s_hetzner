@@ -167,6 +167,7 @@ Other settings you can set in terraform.tfvars
 * worker\_server\_image - Hetzner's server image. Defaults to Debian 11. Refer to worker\_variables.tf for valid values
 * worker\_server\_location - Hetzner's server location. Defaults to Falkenstein. Refer to worker\_variables.tf for valid values
 * k0s\_version - The k0s version to target. Valid values: 1.27.2+k0s.0 for now
+* hccm_enable - Bool, defaults to true. Enables the Hetzner Cloud Controller Manager. CAUTION: Do not enable in dedicated root
 
 # TODO
 

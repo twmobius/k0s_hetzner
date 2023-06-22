@@ -23,6 +23,10 @@ resource "k0s_cluster" "k0s1" {
       {
         role        = "worker"
         environment = { "ROLE" = "worker" }
+        install_flags = var.hccm_enable ? [
+          "--enable-cloud-provider",
+          "--kubelet-extra-args=\"--cloud-provider=external\""
+        ] : []
         ssh = {
           address  = address
           port     = 22
