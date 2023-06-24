@@ -1,7 +1,13 @@
 variable "hcloud_token" {
+  type        = string
   sensitive   = true # Requires terraform >= 0.14
   description = "Value of the Hetzner token"
-  type        = string
+}
+
+variable "hccm_enable" {
+  type        = bool
+  description = "Whether or not the Hetzner Cloud controller manager will be installed"
+  default     = true
 }
 
 variable "ssh_pub_key" {
