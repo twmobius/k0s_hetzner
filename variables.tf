@@ -16,6 +16,12 @@ variable "hcsi_enable" {
   default     = true
 }
 
+variable "prometheus_enable" {
+  type        = bool
+  description = "Whether to enable the entire prometheus stack"
+  default     = true
+}
+
 variable "ssh_pub_key" {
   type        = string
   description = "Public SSH key for connecting to servers"
