@@ -180,6 +180,8 @@ Other settings you can set in terraform.tfvars
 - [x] Decide whether to have the ssh key in user-data or as a terraform resource. Need to evaluate how the latter interacts with cloud-init, if at all
 - [ ] Support Hetzner "private" networks
 - [ ] Support vswitch type in Hetzner "private" networks
-- [ ] Evaluate/support [Hetzner's cloud controller manager](https://github.com/hetznercloud/hcloud-cloud-controller-manager)
+- [x] Evaluate/support [Hetzner's cloud controller manager](https://github.com/hetznercloud/hcloud-cloud-controller-manager)
+- [ ] Evaluate/support [Hetzner's CSI driver](https://github.com/hetznercloud/csi-driver/tree/main)
+- [ ] Add prometheus support
 - [x] Hetzner right kinda leads us to use the root user. We apparently can use cloud-inits user-data to get away from that. Apparently it won't help much, stick with what we got
 - [x] Write more docs
