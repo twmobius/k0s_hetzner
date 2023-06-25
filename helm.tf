@@ -54,7 +54,7 @@ resource "helm_release" "ingress-nginx" {
 }
 
 resource "terraform_data" "hcloud_token" {
-  count = var.hccm_enable ? 1 : 0
+  count = (var.hccm_enable || var.hcsi_enable) ? 1 : 0
   depends_on = [
     k0s_cluster.k0s1,
     local_file.kubeconfig,
@@ -66,6 +66,7 @@ resource "terraform_data" "hcloud_token" {
 }
 
 resource "helm_release" "hccm" {
+  # Versioning policy at https://github.com/hetznercloud/hcloud-cloud-controller-manager#versioning-policy
   count = var.hccm_enable ? 1 : 0
   depends_on = [
     k0s_cluster.k0s1,
@@ -78,4 +79,18 @@ resource "helm_release" "hccm" {
   namespace  = "kube-system"
   version    = "1.16.0"
 
+}
+
+resource "helm_release" "hcloud-csi-driver" {
+  # Versioning policy at https://github.com/hetznercloud/csi-driver/blob/main/docs/kubernetes/README.md#versioning-policy
+  count = var.hcsi_enable ? 1 : 0
+  depends_on = [
+    k0s_cluster.k0s1,
+    local_file.kubeconfig,
+    terraform_data.hcloud_token,
+    helm_release.hccm,
+  ]
+  name      = "hcloud-csi-driver"
+  chart     = "./hcloud-csi-driver-helm-chart"
+  namespace = "kube-system"
 }

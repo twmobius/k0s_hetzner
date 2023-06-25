@@ -10,6 +10,12 @@ variable "hccm_enable" {
   default     = true
 }
 
+variable "hcsi_enable" {
+  type        = bool
+  description = "Whether or not the Hetzner CSI (Cloud Storage Interface) will be installed"
+  default     = true
+}
+
 variable "ssh_pub_key" {
   type        = string
   description = "Public SSH key for connecting to servers"

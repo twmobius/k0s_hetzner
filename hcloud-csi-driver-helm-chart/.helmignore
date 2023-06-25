@@ -1,0 +1,11 @@
+/.git
+/.gitignore
+/.gitlab
+/.gitlab-ci.yml
+/.helmignore
+/docs/
+/logo.png
+/venv/
+/*.tgz
+/*.tgz.prov
+values.*.yaml
