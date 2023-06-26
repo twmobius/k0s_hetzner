@@ -10,6 +10,9 @@ resource "k0s_cluster" "k0s1" {
         role        = var.controller_role
         no_taints   = var.controller_role == "controller+worker" ? true : false
         environment = { "ROLE" = var.controller_role }
+        install_flags = [
+          "--enable-metrics-scraper",
+        ]
         ssh = {
           address  = address
           port     = 22
