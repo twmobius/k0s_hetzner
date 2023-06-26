@@ -10,7 +10,7 @@ variable "worker_server_type" {
   # arm64 machine
   default = "cax11"
   validation {
-    condition     = can(regex("cax[1234]1", var.worker_server_type))
+    condition     = can(regex("c[apc]?x[1234]1", var.worker_server_type))
     error_message = "Unsupported server type provided"
   }
 }
