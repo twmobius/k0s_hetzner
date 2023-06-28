@@ -30,13 +30,13 @@ write_files:
             # allow k8s api connections
             proto tcp dport 6443 ACCEPT;
             # allow:
-            # etcd: 2380/tcp
+            # etcd: 2379/tcp, 2380/tcp
             # kuber-router BGP: 179/tcp
             # Calico VXLAN overlay: 4789/udp
             # kubelet 10250/tcp
             # k0s-api 9443/tcp
             # konnectivity 8132/tcp, 8133/tcp
-            saddr (${ip_addresses}) proto tcp dport (179 2380 8132 8133 9443 10250) ACCEPT;
+            saddr (${ip_addresses}) proto tcp dport (179 2379 2380 8132 8133 9443 10250) ACCEPT;
             saddr (${ip_addresses}) proto udp dport (4789) ACCEPT;
           }
         }
