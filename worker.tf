@@ -68,6 +68,7 @@ resource "hcloud_server" "worker" {
     "role" : "worker"
   }
 
+  # Note: this will need to be reworked to apply to non-ipv4 and non public IP situations
   connection {
     type        = "ssh"
     user        = "root"

@@ -68,6 +68,7 @@ resource "hcloud_server" "controller" {
   labels = {
     "role" : replace(var.controller_role, "+", "-")
   }
+  # Note: this will need to be reworked to apply to non-ipv4 and non public IP situations
   connection {
     type        = "ssh"
     user        = "root"

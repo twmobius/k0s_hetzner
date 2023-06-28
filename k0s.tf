@@ -46,3 +46,13 @@ resource "local_file" "kubeconfig" {
   file_permission = "0600"
   content         = nonsensitive(k0s_cluster.k0s1.kubeconfig)
 }
+
+resource "terraform_data" "kube-router-5s-sync-period" {
+  depends_on = [
+    k0s_cluster.k0s1,
+    local_file.kubeconfig,
+  ]
+  provisioner "local-exec" {
+    command = "kubectl --kubeconfig=kubeconfig-${var.domain} -n kube-system patch daemonset kube-router --type=json --patch '[{\"op\": \"add\", \"path\": \"/spec/template/spec/containers/0/args/-\", \"value\": \"--iptables-sync-period=5s\"}]'"
+  }
+}
