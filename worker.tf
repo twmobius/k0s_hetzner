@@ -67,6 +67,17 @@ resource "hcloud_server" "worker" {
   labels = {
     "role" : "worker"
   }
+
+  connection {
+    type        = "ssh"
+    user        = "root"
+    host        = self.ipv4_address
+    private_key = file(var.ssh_priv_key_path)
+  }
+
+  provisioner "remote-exec" {
+    inline = ["cloud-init status --wait"]
+  }
 }
 
 # DNS Reverse RRs

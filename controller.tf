@@ -64,8 +64,19 @@ resource "hcloud_server" "controller" {
     ipv4         = hcloud_primary_ip.controller_ipv4[count.index].id
     ipv6         = hcloud_primary_ip.controller_ipv6[count.index].id
   }
+
   labels = {
     "role" : replace(var.controller_role, "+", "-")
+  }
+  connection {
+    type        = "ssh"
+    user        = "root"
+    host        = self.ipv4_address
+    private_key = file(var.ssh_priv_key_path)
+  }
+
+  provisioner "remote-exec" {
+    inline = ["cloud-init status --wait"]
   }
 }
 
