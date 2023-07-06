@@ -12,7 +12,6 @@ package_update: true
 package_upgrade: true
 package_reboot_if_required: true
 # Install ferm for firewalling purposes, standard ferm firewalling is pretty strict
-# TODO: Figure out a way to open up ports for other nodes in the cluster
 # Install curl cause we 'll need it later
 packages:
   - ferm
@@ -32,7 +31,7 @@ write_files:
             # allow:
             # etcd: 2379/tcp, 2380/tcp
             # kuber-router BGP: 179/tcp
-            # Calico VXLAN overlay: 4789/udp
+            # Calico VXLAN overlay: 4789/udp. This one is being taken care for by Calico itself
             # kubelet 10250/tcp
             # k0s-api 9443/tcp
             # konnectivity 8132/tcp, 8133/tcp
@@ -41,7 +40,6 @@ write_files:
             saddr (${controller_lb_addresses}) proto tcp dport (6443 8132 9443) ACCEPT;
             %{ endif }
             saddr (${ip_addresses}) proto tcp dport (179 2380 8132 8133 9443 10250) ACCEPT;
-            saddr (${ip_addresses}) proto udp dport (4789) ACCEPT;
           }
         }
       }
