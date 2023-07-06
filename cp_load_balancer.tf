@@ -1,5 +1,10 @@
+locals {
+  cp_balancer_enable           = (var.controller_role == "single" || !var.balance_control_plane) ? 0 : 1
+  cp_balanced_controller_count = local.cp_balancer_enable == 0 ? 0 : var.controller_count
+}
+
 resource "hcloud_load_balancer" "cp_load_balancer" {
-  count              = var.controller_role == "single" ? 0 : 1
+  count              = local.cp_balancer_enable
   name               = "control-plane-balancer"
   load_balancer_type = var.controller_load_balancer_type
   location           = var.controller_server_location
@@ -9,7 +14,7 @@ resource "hcloud_load_balancer" "cp_load_balancer" {
 }
 
 resource "hcloud_load_balancer_service" "cp_load_balancer_kubernetes_service" {
-  count            = var.controller_role == "single" ? 0 : 1
+  count            = local.cp_balancer_enable
   depends_on       = [hcloud_load_balancer.cp_load_balancer]
   load_balancer_id = hcloud_load_balancer.cp_load_balancer[0].id
   protocol         = "tcp"
@@ -18,7 +23,7 @@ resource "hcloud_load_balancer_service" "cp_load_balancer_kubernetes_service" {
 }
 
 resource "hcloud_load_balancer_service" "cp_load_balancer_konnectivity_service" {
-  count            = var.controller_role == "single" ? 0 : 1
+  count            = local.cp_balancer_enable
   depends_on       = [hcloud_load_balancer.cp_load_balancer]
   load_balancer_id = hcloud_load_balancer.cp_load_balancer[0].id
   protocol         = "tcp"
@@ -27,7 +32,7 @@ resource "hcloud_load_balancer_service" "cp_load_balancer_konnectivity_service" 
 }
 
 resource "hcloud_load_balancer_service" "cp_load_balancer_controller_api_service" {
-  count            = var.controller_role == "single" ? 0 : 1
+  count            = local.cp_balancer_enable
   depends_on       = [hcloud_load_balancer.cp_load_balancer]
   load_balancer_id = hcloud_load_balancer.cp_load_balancer[0].id
   protocol         = "tcp"
@@ -36,7 +41,7 @@ resource "hcloud_load_balancer_service" "cp_load_balancer_controller_api_service
 }
 
 resource "hcloud_load_balancer_target" "cp_load_balancer_target" {
-  count            = var.controller_role == "single" ? 0 : var.controller_count
+  count            = local.cp_balanced_controller_count
   type             = "server"
   depends_on       = [hcloud_load_balancer.cp_load_balancer]
   load_balancer_id = hcloud_load_balancer.cp_load_balancer[0].id
@@ -44,14 +49,14 @@ resource "hcloud_load_balancer_target" "cp_load_balancer_target" {
 }
 
 resource "hcloud_rdns" "cp_load_balancer_ipv4" {
-  count            = var.controller_role == "single" ? 0 : 1
+  count            = local.cp_balancer_enable
   load_balancer_id = hcloud_load_balancer.cp_load_balancer[0].id
   ip_address       = hcloud_load_balancer.cp_load_balancer[0].ipv4
   dns_ptr          = format("%s.%s", "cp-bl", var.domain)
 }
 
 resource "hcloud_rdns" "cp_load_balancer_ipv6" {
-  count            = var.controller_role == "single" ? 0 : 1
+  count            = local.cp_balancer_enable
   load_balancer_id = hcloud_load_balancer.cp_load_balancer[0].id
   ip_address       = hcloud_load_balancer.cp_load_balancer[0].ipv6
   dns_ptr          = format("%s.%s", "cp-bl", var.domain)

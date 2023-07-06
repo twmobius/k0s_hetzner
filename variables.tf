@@ -16,6 +16,12 @@ variable "hcsi_enable" {
   default     = true
 }
 
+variable "balance_control_plane" {
+  type        = bool
+  description = "Whether the control plane will be load balanced. Needs > 1 controller"
+  default     = true
+}
+
 variable "prometheus_enable" {
   type        = bool
   description = "Whether to enable the entire prometheus stack"
