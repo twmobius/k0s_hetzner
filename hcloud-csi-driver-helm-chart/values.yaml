@@ -19,48 +19,50 @@
 
 ## Controller configuration
 controller:
-
   ## hcloud-csi-driver Docker image for controller containers
   image: hetznercloud/hcloud-csi-driver
   tag: v2.3.2
-
   ## ImagePullPolicy for the hcloud-csi-driver Docker image
   imagePullPolicy: IfNotPresent
-
 
 ## Node configuration
 node:
-
   ## hcloud-csi-driver Docker image for node containers
   image: hetznercloud/hcloud-csi-driver
   tag: v2.3.2
-
   ## ImagePullPolicy for the hcloud-csi-driver Docker image
   imagePullPolicy: IfNotPresent
-
   ## (host) path to kubelet lib dir
   kubeletPath: /var/lib/k0s/kubelet
 
 ## Settings for the StorageClass resource to be created.
 storageClass:
-
   ## Name of the StorageClass to be created.
   name: hcloud-volumes
-
   ## Should the StorageClass be annotated as default storage class?
   isDefault: false
-
   ## The reclaimPolicy that the StorageClass should use
   reclaimPolicy: "Delete"
-
   ## The volumeBinding Model. Immediate or WaitForFirstConsumer
   volumeBindingMode: WaitForFirstConsumer
+  ## Whether to allow resizing a volume to a larger size (can't be smaller)
+  allowVolumeExpansion: true
 
+## If a secret is provided, another StorageClass with LUKS encrypt Volumes will be provisioned
+EncryptedStorageClass:
+  encryptionpassphrase: null # Add your own
+  ## Name of the StorageClass to be created.
+  name: hcloud-volumes-encrypted
+  ## Should the StorageClass be annotated as default storage class?
+  isDefault: false
+  ## The reclaimPolicy that the StorageClass should use
+  reclaimPolicy: "Delete"
+  ## The volumeBinding Model. Immediate or WaitForFirstConsumer
+  volumeBindingMode: WaitForFirstConsumer
   ## Whether to allow resizing a volume to a larger size (can't be smaller)
   allowVolumeExpansion: true
 
 ## Metrics configuration
 metrics:
-
   ## Enable metrics (create exporters etc.)
   enabled: false
