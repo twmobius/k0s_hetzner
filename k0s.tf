@@ -7,7 +7,7 @@ resource "k0s_cluster" "k0s1" {
   ]
   name    = var.domain
   version = var.k0s_version
-  config = templatefile("templates/k0s.yaml", {
+  config = templatefile("templates/k0s.tftpl", {
     controller_lb_address = local.cp_balanced_controller_count == 0 ? "" : hcloud_load_balancer.cp_load_balancer[0].ipv4,
     controller_ip_addresses = concat(
       hcloud_primary_ip.controller_ipv4.*.ip_address,
