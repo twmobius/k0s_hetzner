@@ -93,6 +93,10 @@ resource "helm_release" "hcloud-csi-driver" {
   name      = "hcloud-csi-driver"
   chart     = "./hcloud-csi-driver-helm-chart"
   namespace = "kube-system"
+  set {
+    name = "EncryptedStorageClass.encryptionpassphrase"
+    value = var.hcsi_encryption_key
+  }
 }
 
 resource "helm_release" "kube-stack-prometheus" {

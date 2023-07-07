@@ -16,6 +16,13 @@ variable "hcsi_enable" {
   default     = true
 }
 
+variable "hcsi_encryption_key" {
+  type        = string
+  description = "If specified, a Kubernetes StorageClass with LUKS encryption will become available"
+  default     = ""
+}
+
+
 variable "balance_control_plane" {
   type        = bool
   description = "Whether the control plane will be load balanced. Needs > 1 controller"
