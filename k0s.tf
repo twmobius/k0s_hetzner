@@ -5,8 +5,8 @@ resource "k0s_cluster" "k0s1" {
     hcloud_load_balancer_service.cp_load_balancer_kubernetes_service,
     hcloud_load_balancer_target.cp_load_balancer_target
   ]
-  name       = var.domain
-  version    = var.k0s_version
+  name    = var.domain
+  version = var.k0s_version
   config = templatefile("templates/k0s.yaml", {
     controller_lb_address = local.cp_balanced_controller_count == 0 ? "" : hcloud_load_balancer.cp_load_balancer[0].ipv4,
     controller_ip_addresses = concat(
