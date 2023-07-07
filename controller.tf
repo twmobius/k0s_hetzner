@@ -53,7 +53,7 @@ resource "hcloud_server" "controller" {
           hcloud_primary_ip.worker_ipv4.*.ip_address,
           hcloud_primary_ip.worker_ipv6.*.ip_address,
       ))),
-      controller_lb_addresses = (var.controller_role == "single" ? "" :
+      controller_lb_addresses = (local.cp_balanced_controller_count == 0 ? "" :
         join(" ", sort(
           [hcloud_load_balancer.cp_load_balancer[0].ipv4, hcloud_load_balancer.cp_load_balancer[0].ipv6]
       )))
