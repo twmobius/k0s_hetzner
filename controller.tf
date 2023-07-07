@@ -42,7 +42,7 @@ resource "hcloud_server" "controller" {
   image              = var.controller_server_image
   location           = var.controller_server_location
   user_data = templatefile(
-    "user-data.tftpl",
+    "templates/user-data.tftpl",
     {
       fqdn = (var.controller_role == "single" ? format("%s.%s", var.single_controller_name, var.domain) :
       format("%s%s.%s", "controller", count.index, var.domain)),

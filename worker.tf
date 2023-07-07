@@ -44,7 +44,7 @@ resource "hcloud_server" "worker" {
   image              = var.worker_server_image
   location           = var.worker_server_location
   user_data = templatefile(
-    "user-data.tftpl",
+    "templates/user-data.tftpl",
     { fqdn = format("%s%s.%s", "worker", count.index, var.domain),
       ip_addresses = join(" ", sort(
         concat(
