@@ -46,5 +46,13 @@ jobs:
       run: |
         for fixture in .fixtures/*.tfvars;
         do
-          terraform plan -input=false -var-file $fixture
+          echo -n "TESTING using: ${fixture} ..."
+          a=$(terraform plan -input=false -var-file $fixture)
+          if [ $? -eq 0 ]
+          then
+            echo "done"
+          else
+            echo "failure, output was:"
+            echo $a
+          fi
         done
