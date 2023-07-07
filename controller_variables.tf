@@ -18,7 +18,7 @@ variable "controller_server_type" {
 variable "controller_server_image" {
   type        = string
   description = "The Hetzner cloud server image. Values: debian-11, debian-12"
-  default = "debian-12"
+  default     = "debian-12"
   validation {
     condition     = can(regex("debian-1[12]", var.controller_server_image))
     error_message = "Unsupported server image provided"

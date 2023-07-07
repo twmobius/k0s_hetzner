@@ -94,7 +94,7 @@ resource "helm_release" "hcloud-csi-driver" {
   chart     = "./hcloud-csi-driver-helm-chart"
   namespace = "kube-system"
   set {
-    name = "EncryptedStorageClass.encryptionpassphrase"
+    name  = "EncryptedStorageClass.encryptionpassphrase"
     value = var.hcsi_encryption_key
   }
 }
