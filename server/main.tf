@@ -9,6 +9,7 @@ locals {
       cidrs = join(" ", rule.cidrs),
     }
   }
+  role = replace(var.role, "+", "-")
 }
 
 # Push the SSH public key to hetzner
@@ -19,17 +20,17 @@ resource "hcloud_ssh_key" "default" {
 
 # Spread out for great chance a Hetzner outage doesn't impact us
 resource "hcloud_placement_group" "pg" {
-  name = "${var.role}-pg"
+  name = "${local.role}-pg"
   type = "spread"
   labels = {
-    "role" : var.role
+    "role" : local.role,
   }
 }
 
 # Create servers and link them to the above IPs
 resource "hcloud_server" "server" {
   count              = var.amount
-  name               = "${var.role}-${count.index}"
+  name               = "${local.role}-${count.index}"
   server_type        = var.type
   placement_group_id = hcloud_placement_group.pg.id
   image              = var.image
@@ -37,7 +38,7 @@ resource "hcloud_server" "server" {
   user_data = templatefile(
     "server/templates/user-data.tftpl",
     {
-      fqdn           = format("%s-%s.%s", var.role, count.index, var.domain),
+      fqdn           = format("%s-%s.%s", local.role, count.index, var.domain),
       firewall_rules = local.firewall_rules,
     }
   )
@@ -51,7 +52,7 @@ resource "hcloud_server" "server" {
     ipv6         = var.ip_addresses["ipv6"][count.index]
   }
   labels = {
-    "role" : var.role
+    "role" : local.role,
   }
 
   # Note: this will need to be reworked to apply to non-ipv4 and non public IP situations
