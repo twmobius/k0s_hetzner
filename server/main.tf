@@ -30,7 +30,7 @@ resource "hcloud_placement_group" "pg" {
 # Create servers and link them to the above IPs
 resource "hcloud_server" "server" {
   count              = var.amount
-  name               = "${local.role}-${count.index}"
+  name               = var.hostname != null ? var.hostname : "${local.role}-${count.index}"
   server_type        = var.type
   placement_group_id = hcloud_placement_group.pg.id
   image              = var.image
@@ -38,12 +38,15 @@ resource "hcloud_server" "server" {
   user_data = templatefile(
     "server/templates/user-data.tftpl",
     {
-      fqdn           = format("%s-%s.%s", local.role, count.index, var.domain),
+      fqdn           = format("%s.%s",
+        var.hostname != null ? var.hostname : "${local.role}-${count.index}",
+        var.domain,
+      )
       firewall_rules = local.firewall_rules,
     }
   )
   ssh_keys = [
-    hcloud_ssh_key.default.id
+    hcloud_ssh_key_id
   ]
   public_net {
     ipv4_enabled = local.enable_ipv4

@@ -29,6 +29,12 @@ variable "enable_ipv6" {
   default     = true
 }
 
+variable "hostname" {
+  type        = string
+  description = "You can override the generated name to one of your choose. Only use if spawning up a single server"
+  default     = null
+}
+
 variable "datacenter" {
   type        = string
   description = "The Hetzner datacenter name to create the server in. Values: nbg1-dc3, fsn1-dc14, hel1-dc2, ash-dc1, hil-dc1. Defaults to fsn1-dc14"

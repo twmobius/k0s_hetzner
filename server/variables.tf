@@ -64,6 +64,12 @@ variable "datacenter" {
   }
 }
 
+variable "hostname" {
+  type        = string
+  description = "You can override the generated name to one of your choose. Only use if spawning up a single server"
+  default     = null
+}
+
 variable "firewall_rules" {
   type = map(object({
     proto = string
