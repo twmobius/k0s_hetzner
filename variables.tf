@@ -26,7 +26,7 @@ variable "hcsi_encryption_key" {
 variable "balance_control_plane" {
   type        = bool
   description = "Whether the control plane will be load balanced. Needs > 1 controller"
-  default     = true
+  default     = false
 }
 
 variable "prometheus_enable" {
