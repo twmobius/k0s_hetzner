@@ -13,6 +13,14 @@ variable "controller_load_balancer_type" {
   }
 }
 
+output "controller_load_balancer_ip4_addr" {
+  value = hcloud_load_balancer.cp_load_balancer.*.ipv4
+}
+
+output "controller_load_balancer_ip6_addr" {
+  value = hcloud_load_balancer.cp_load_balancer.*.ipv6
+}
+
 resource "hcloud_load_balancer" "cp_load_balancer" {
   count              = local.cp_balancer_enable
   name               = "control-plane-balancer"
