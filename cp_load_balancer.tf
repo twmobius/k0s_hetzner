@@ -3,6 +3,16 @@ locals {
   cp_balanced_controller_count = local.cp_balancer_enable == 0 ? 0 : var.controller_count
 }
 
+variable "controller_load_balancer_type" {
+  type        = string
+  description = "The load balancer type to deploy in front of the controllers"
+  default     = "lb11"
+  validation {
+    condition     = can(regex("lb[123]1", var.controller_load_balancer_type))
+    error_message = "Unsupported load balancer type provided"
+  }
+}
+
 resource "hcloud_load_balancer" "cp_load_balancer" {
   count              = local.cp_balancer_enable
   name               = "control-plane-balancer"
