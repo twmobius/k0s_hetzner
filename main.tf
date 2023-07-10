@@ -39,7 +39,7 @@ module "workers" {
   ssh_pub_key_id    = hcloud_ssh_key.default.id
   ssh_priv_key_path = var.ssh_priv_key_path
   domain            = var.domain
-  ip_addresses      = module.worker_ips.addresses
+  ip_address_ids    = module.worker_ips.address_ids
   firewall_rules = {
     bgp = {
       proto = "tcp",
@@ -96,7 +96,7 @@ module "controllers" {
   ssh_priv_key_path = var.ssh_priv_key_path
   domain            = var.domain
   hostname          = var.single_controller_hostname
-  ip_addresses      = module.controller_ips.addresses
+  ip_address_ids    = module.controller_ips.address_ids
   firewall_rules = {
     k8s-api = {
       proto = "tcp",

@@ -1,6 +1,6 @@
 locals {
-  enable_ipv6 = length(var.ip_addresses["ipv6"]) > 0 ? true : false
-  enable_ipv4 = length(var.ip_addresses["ipv4"]) > 0 ? true : false
+  enable_ipv6 = length(var.ip_address_ids["ipv6"]) > 0 ? true : false
+  enable_ipv4 = length(var.ip_address_ids["ipv4"]) > 0 ? true : false
   firewall_rules = {
     for name, rule in var.firewall_rules :
     name => {
@@ -45,8 +45,8 @@ resource "hcloud_server" "server" {
   public_net {
     ipv4_enabled = local.enable_ipv4
     ipv6_enabled = local.enable_ipv6
-    ipv4         = var.ip_addresses["ipv4"][count.index]
-    ipv6         = var.ip_addresses["ipv6"][count.index]
+    ipv4         = var.ip_address_ids["ipv4"][count.index]
+    ipv6         = var.ip_address_ids["ipv6"][count.index]
   }
   labels = {
     "role" : local.role,

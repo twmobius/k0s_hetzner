@@ -28,9 +28,9 @@ variable "domain" {
   description = "The domain of all hosts. Will be used to generate all PTRs"
 }
 
-variable "ip_addresses" {
-  type        = map(list(string))
-  description = "A map of AF_INET family and list of addresses"
+variable "ip_address_ids" {
+  type        = map(list(number))
+  description = "A map of AF_INET family and list of terraform primary_ip ids"
 }
 
 variable "type" {
