@@ -16,7 +16,7 @@ resource "k0s_cluster" "k0s1" {
   })
   hosts = concat(
     [
-      for address in hcloud_server.controller.*.ipv4_address :
+      for address in module.controller_ips.addresses["ipv4"] :
       {
         role        = var.controller_role
         no_taints   = var.controller_role == "controller+worker" ? true : false
@@ -33,7 +33,7 @@ resource "k0s_cluster" "k0s1" {
       }
     ],
     [
-      for address in hcloud_server.worker.*.ipv4_address :
+      for address in module.worker_ips.addresses["ipv4"] :
       {
         role        = "worker"
         environment = { "ROLE" = "worker" }
