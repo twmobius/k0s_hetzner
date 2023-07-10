@@ -47,7 +47,7 @@ module "workers" {
       cidrs = concat(
         module.worker_ips.addresses["ipv6"],
         module.worker_ips.addresses["ipv4"],
-      )
+      ),
     }
     vxlan = {
       proto = "udp",
@@ -55,7 +55,7 @@ module "workers" {
       cidrs = concat(
         module.worker_ips.addresses["ipv6"],
         module.worker_ips.addresses["ipv4"],
-      )
+      ),
     }
     kubelet = {
       proto = "tcp",
@@ -63,7 +63,7 @@ module "workers" {
       cidrs = concat(
         module.worker_ips.addresses["ipv6"],
         module.worker_ips.addresses["ipv4"],
-      )
+      ),
     }
     kubeproxy = {
       proto = "tcp",
@@ -71,7 +71,7 @@ module "workers" {
       cidrs = concat(
         module.worker_ips.addresses["ipv6"],
         module.worker_ips.addresses["ipv4"],
-      )
+      ),
     }
     prometheus_node_exporter = {
       proto = "tcp",
@@ -79,7 +79,7 @@ module "workers" {
       cidrs = concat(
         module.worker_ips.addresses["ipv6"],
         module.worker_ips.addresses["ipv4"],
-      )
+      ),
     }
   }
 }
@@ -101,12 +101,7 @@ module "controllers" {
     k8s-api = {
       proto = "tcp",
       ports = [6443],
-      cidrs = concat(
-        module.worker_ips.addresses["ipv6"],
-        module.worker_ips.addresses["ipv4"],
-        module.controller_ips.addresses["ipv6"],
-        module.controller_ips.addresses["ipv4"],
-      )
+      cidrs = ["0.0.0.0/0"],
     }
     etcd = {
       proto = "tcp",
@@ -114,7 +109,7 @@ module "controllers" {
       cidrs = concat(
         module.controller_ips.addresses["ipv6"],
         module.controller_ips.addresses["ipv4"],
-      )
+      ),
     }
     konnectivity = {
       proto = "tcp",
@@ -122,7 +117,7 @@ module "controllers" {
       cidrs = concat(
         module.worker_ips.addresses["ipv6"],
         module.worker_ips.addresses["ipv4"],
-      )
+      ),
     }
     k0s-api = {
       proto = "tcp",
@@ -132,7 +127,7 @@ module "controllers" {
         module.worker_ips.addresses["ipv4"],
         module.controller_ips.addresses["ipv6"],
         module.controller_ips.addresses["ipv4"],
-      )
+      ),
     }
   }
 }

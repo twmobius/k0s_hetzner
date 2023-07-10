@@ -76,6 +76,7 @@ variable "firewall_rules" {
     ports = list(number)
     cidrs = list(string)
   }))
+  description = "A map of firewall holes. The keys are arbitrary strings, the values objects with proto, ports, cidrs keys"
   default = {
     k8s-api = { proto = "tcp", ports = [6443], cidrs = ["0.0.0.0/0"] }
   }
