@@ -152,3 +152,16 @@ variable "single_controller_hostname" {
   description = "If you are deploying using a single role, it's probably a pet. Name it"
   default     = null
 }
+
+# Networking values
+variable "enable_ipv4" {
+  type        = bool
+  description = "Whether an IPv4 address should be allocated"
+  default     = true
+}
+
+variable "enable_ipv6" {
+  type        = bool
+  description = "Whether an IPv6 address should be allocated"
+  default     = true
+}

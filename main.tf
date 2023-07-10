@@ -11,17 +11,21 @@ resource "hcloud_ssh_key" "default" {
 module "worker_ips" {
   source = "./modules/primary_ip"
 
-  amount = var.worker_count
-  role   = "worker"
-  domain = var.domain
+  amount      = var.worker_count
+  role        = "worker"
+  domain      = var.domain
+  enable_ipv4 = var.enable_ipv4
+  enable_ipv6 = var.enable_ipv6
 }
 
 module "controller_ips" {
   source = "./modules/primary_ip"
 
-  amount = var.controller_count
-  role   = "controller"
-  domain = var.domain
+  amount      = var.controller_count
+  role        = "controller"
+  domain      = var.domain
+  enable_ipv4 = var.enable_ipv4
+  enable_ipv6 = var.enable_ipv6
 }
 
 module "workers" {
