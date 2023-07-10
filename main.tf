@@ -81,7 +81,7 @@ module "controllers" {
   source = "./modules/server"
 
   amount            = var.controller_count
-  role              = "controller"
+  role              = var.controller_role
   ssh_pub_key_id    = hcloud_ssh_key.default.id
   ssh_priv_key_path = var.ssh_priv_key_path
   domain            = var.domain
