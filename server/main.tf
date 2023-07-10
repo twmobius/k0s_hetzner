@@ -32,7 +32,7 @@ resource "hcloud_server" "server" {
   user_data = templatefile(
     "server/templates/user-data.tftpl",
     {
-      fqdn           = format("%s.%s",
+      fqdn = format("%s.%s",
         var.hostname != null ? var.hostname : "${local.role}-${count.index}",
         var.domain,
       )
