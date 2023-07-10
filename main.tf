@@ -21,7 +21,7 @@ module "workers" {
 
   amount            = var.worker_count
   role              = "worker"
-  ssh_pub_key       = var.ssh_pub_key
+  ssh_pub_key_id   = hcloud_ssh_key.default.id 
   ssh_priv_key_path = var.ssh_priv_key_path
   domain            = var.domain
   ip_addresses      = module.worker_ips.addresses

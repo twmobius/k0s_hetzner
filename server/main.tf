@@ -12,12 +12,6 @@ locals {
   role = replace(var.role, "+", "-")
 }
 
-# Push the SSH public key to hetzner
-resource "hcloud_ssh_key" "default" {
-  name       = "hetzner"
-  public_key = var.ssh_pub_key
-}
-
 # Spread out for great chance a Hetzner outage doesn't impact us
 resource "hcloud_placement_group" "pg" {
   name = "${local.role}-pg"
@@ -46,7 +40,7 @@ resource "hcloud_server" "server" {
     }
   )
   ssh_keys = [
-    hcloud_ssh_key_id
+    var.ssh_pub_key_id
   ]
   public_net {
     ipv4_enabled = local.enable_ipv4

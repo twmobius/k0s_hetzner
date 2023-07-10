@@ -3,9 +3,9 @@ variable "amount" {
   description = "The number of servers"
 }
 
-variable "ssh_pub_key" {
+variable "ssh_pub_key_id" {
   type        = string
-  description = "Public SSH key for connecting to servers"
+  description = "The terraform id of SSH key for connecting to servers"
 }
 
 variable "ssh_priv_key_path" {
