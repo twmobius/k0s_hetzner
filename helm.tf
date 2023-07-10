@@ -45,10 +45,11 @@ resource "helm_release" "ingress-nginx" {
   set_list {
     name = "controller.service.externalIPs"
     value = var.controller_role == "single" ? concat(
-      hcloud_server.controller.*.ipv4_address,
-      hcloud_server.controller.*.ipv6_address) : concat(
-      hcloud_server.worker.*.ipv4_address,
-      hcloud_server.worker.*.ipv6_address,
+      module.controller_ips.addresses["ipv4"],
+      module.controller_ips.addresses["ipv6"],
+      ) : concat(
+      module.worker_ips.addresses["ipv4"],
+      module.worker_ips.addresses["ipv6"],
     )
   }
 }

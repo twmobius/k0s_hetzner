@@ -10,8 +10,8 @@ resource "k0s_cluster" "k0s1" {
   config = templatefile("templates/k0s.tftpl", {
     controller_lb_address = local.cp_balanced_controller_count == 0 ? "" : hcloud_load_balancer.cp_load_balancer[0].ipv4,
     controller_ip_addresses = concat(
-      hcloud_primary_ip.controller_ipv4.*.ip_address,
-      hcloud_primary_ip.controller_ipv6.*.ip_address,
+      module.controller_ips.addresses["ipv4"],
+      module.controller_ips.addresses["ipv6"],
     )
   })
   hosts = concat(
