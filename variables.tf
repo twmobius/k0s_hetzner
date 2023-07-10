@@ -60,3 +60,95 @@ variable "k0s_version" {
     error_message = "Unsupported k0s version provided"
   }
 }
+
+# Worker specific variables
+variable "worker_count" {
+  type        = number
+  description = "The number of workers. Defaults to 3"
+  default     = 3
+}
+
+variable "worker_server_type" {
+  type        = string
+  description = "The Hetzner cloud server type. Values: cax11, cax21, cax31, cax41 (all ARM64)"
+  # arm64 machine
+  default = "cax11"
+  validation {
+    condition     = can(regex("c[apc]?x[1234]1", var.worker_server_type))
+    error_message = "Unsupported server type provided"
+  }
+}
+
+variable "worker_server_image" {
+  type        = string
+  description = "The Hetzner cloud server image. Values: debian-11, debian-12"
+  default     = "debian-12"
+  validation {
+    condition     = can(regex("debian-1[12]", var.worker_server_image))
+    error_message = "Unsupported server image provided"
+  }
+}
+
+variable "worker_server_datacenter" {
+  type        = string
+  description = "The Hetzner datacenter name to create the server in. Values: nbg1-dc3, fsn1-dc14, hel1-dc2, ash-dc1 or hil-dc1"
+  default     = "fsn1-dc14"
+  validation {
+    condition     = can(regex("\\w{1,}-dc[0-9]{1,}", var.worker_server_datacenter))
+    error_message = "Unsupported datacenter provided"
+  }
+}
+
+# Controller specific variables
+variable "controller_count" {
+  type        = number
+  description = "The number of controllers. Defaults to 3"
+  default     = 3
+}
+
+variable "controller_server_type" {
+  type        = string
+  description = "The Hetzner cloud server type. Values: cax11, cax21, cax31, cax41 (all ARM64)"
+  # arm64 machine
+  default = "cax11"
+  validation {
+    condition     = can(regex("c[apc]?x[1234]1", var.controller_server_type))
+    error_message = "Unsupported server type provided"
+  }
+}
+
+variable "controller_server_image" {
+  type        = string
+  description = "The Hetzner cloud server image. Values: debian-11, debian-12"
+  default     = "debian-12"
+  validation {
+    condition     = can(regex("debian-1[12]", var.controller_server_image))
+    error_message = "Unsupported server image provided"
+  }
+}
+
+variable "controller_server_datacenter" {
+  type        = string
+  description = "The Hetzner datacenter name to create the server in. Values: nbg1-dc3, fsn1-dc14, hel1-dc2, ash-dc1 or hil-dc1"
+  default     = "fsn1-dc14"
+  validation {
+    condition     = contains(["nbg1-dc3", "hel1-dc2", "fsn1-dc14", "ash-dc1", "hil-dc1"], var.controller_server_datacenter)
+    error_message = "Unsupported datacenter provided"
+  }
+}
+
+variable "controller_role" {
+  type        = string
+  description = "The k0s role for a controller. Values: controller, controller+worker, single"
+  default     = "controller"
+  validation {
+    condition     = can(regex("controller|controller+worker|single", var.controller_role))
+    error_message = "Unsupported controller role"
+  }
+}
+
+variable "single_controller_hostname" {
+  type        = string
+  description = "If you are deploying using a single role, it's probably a pet. Name it"
+  default     = null
+}

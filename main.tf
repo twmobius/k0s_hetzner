@@ -28,6 +28,9 @@ module "workers" {
   source = "./modules/server"
 
   amount            = var.worker_count
+  type              = var.worker_server_type
+  image             = var.worker_server_image
+  datacenter        = var.worker_server_datacenter
   role              = "worker"
   ssh_pub_key_id    = hcloud_ssh_key.default.id
   ssh_priv_key_path = var.ssh_priv_key_path
@@ -81,10 +84,14 @@ module "controllers" {
   source = "./modules/server"
 
   amount            = var.controller_count
+  type              = var.controller_server_type
+  image             = var.controller_server_image
+  datacenter        = var.controller_server_datacenter
   role              = var.controller_role
   ssh_pub_key_id    = hcloud_ssh_key.default.id
   ssh_priv_key_path = var.ssh_priv_key_path
   domain            = var.domain
+  hostname          = var.single_controller_hostname
   ip_addresses      = module.controller_ips.addresses
   firewall_rules = {
     k8s-api = {
