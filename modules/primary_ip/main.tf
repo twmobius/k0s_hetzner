@@ -8,7 +8,7 @@ locals {
 # from creating the servers in order to populate firewall rules
 resource "hcloud_primary_ip" "ipv4" {
   count         = local.ipv4_count
-  name          = var.hostname != null ? var.hostname : "${local.role}-${count.index}"
+  name          = var.hostname != null ? var.hostname : "ipv4-${local.role}-${count.index}"
   type          = "ipv4"
   datacenter    = var.datacenter
   assignee_type = "server"
@@ -20,7 +20,7 @@ resource "hcloud_primary_ip" "ipv4" {
 
 resource "hcloud_primary_ip" "ipv6" {
   count         = local.ipv6_count
-  name          = var.hostname != null ? var.hostname : "${local.role}-${count.index}"
+  name          = var.hostname != null ? var.hostname : "ipv6-${local.role}-${count.index}"
   type          = "ipv6"
   datacenter    = var.datacenter
   assignee_type = "server"
