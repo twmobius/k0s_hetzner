@@ -30,7 +30,7 @@ resource "hcloud_server" "server" {
   image              = var.image
   datacenter         = var.datacenter
   user_data = templatefile(
-    "server/templates/user-data.tftpl",
+    "modules/server/templates/user-data.tftpl",
     {
       fqdn = format("%s.%s",
         var.hostname != null ? var.hostname : "${local.role}-${count.index}",
