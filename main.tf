@@ -3,6 +3,12 @@ provider "hcloud" {
   token = var.hcloud_token
 }
 
+provider "helm" {
+  kubernetes {
+    config_path = "kubeconfig-${var.domain}"
+  }
+}
+
 resource "hcloud_ssh_key" "default" {
   name       = "hetzner"
   public_key = var.ssh_pub_key
@@ -131,4 +137,40 @@ module "controllers" {
       ),
     }
   }
+}
+
+module "k0s" {
+  source = "./modules/k0s"
+  depends_on = [
+    module.workers,
+    module.controllers,
+  ]
+
+  domain              = var.domain
+  hcloud_token        = var.hcloud_token
+  hccm_enable         = var.hccm_enable
+  hcsi_enable         = var.hcsi_enable
+  hcsi_encryption_key = var.hcsi_encryption_key
+  prometheus_enable   = var.prometheus_enable
+  ssh_priv_key_path   = var.ssh_priv_key_path
+  worker_ips = concat(
+    module.worker_ips.addresses["ipv4"],
+    module.worker_ips.addresses["ipv6"],
+  )
+  controller_ips = concat(
+    module.controller_ips.addresses["ipv4"],
+    module.controller_ips.addresses["ipv6"],
+  )
+  cp_balancer_ips = concat(
+    module.controller_ips.lb_addresses["ipv4"],
+    module.controller_ips.lb_addresses["ipv6"],
+  )
+  #TODO: Take into account controller+worker too
+  externalIPs = var.controller_role == "single" ? concat(
+    module.controller_ips.addresses["ipv4"],
+    module.controller_ips.addresses["ipv6"],
+    ) : concat(
+    module.worker_ips.addresses["ipv4"],
+    module.worker_ips.addresses["ipv6"],
+  )
 }

@@ -47,7 +47,7 @@ variable "ssh_priv_key_path" {
 
 variable "domain" {
   type        = string
-  description = "The domain of all hosts. Will be used to generate all PTRs"
+  description = "The domain of all hosts. Will be used to generate all PTRs and names"
 }
 
 variable "k0s_version" {

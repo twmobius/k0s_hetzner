@@ -1,14 +1,8 @@
 # Note: don't go overboard adding helm charts in this file. It is meant just
 # for infrastructural stuff, not generic applications
-provider "helm" {
-  kubernetes {
-    config_path = "kubeconfig-${var.domain}"
-  }
-}
-
 resource "helm_release" "cert-manager" {
   depends_on = [
-    k0s_cluster.k0s1,
+    k0s_cluster.k0s,
     local_file.kubeconfig
   ]
   name       = "cert-manager"
@@ -29,7 +23,7 @@ resource "helm_release" "cert-manager" {
 
 resource "helm_release" "ingress-nginx" {
   depends_on = [
-    k0s_cluster.k0s1,
+    k0s_cluster.k0s,
     local_file.kubeconfig
   ]
   name       = "ingress-nginx"
@@ -43,21 +37,15 @@ resource "helm_release" "ingress-nginx" {
     value = "NodePort"
   }
   set_list {
-    name = "controller.service.externalIPs"
-    value = var.controller_role == "single" ? concat(
-      module.controller_ips.addresses["ipv4"],
-      module.controller_ips.addresses["ipv6"],
-      ) : concat(
-      module.worker_ips.addresses["ipv4"],
-      module.worker_ips.addresses["ipv6"],
-    )
+    name  = "controller.service.externalIPs"
+    value = var.externalIPs
   }
 }
 
 resource "terraform_data" "hcloud_token" {
   count = (var.hccm_enable || var.hcsi_enable) ? 1 : 0
   depends_on = [
-    k0s_cluster.k0s1,
+    k0s_cluster.k0s,
     local_file.kubeconfig,
   ]
   provisioner "local-exec" {
@@ -70,7 +58,7 @@ resource "helm_release" "hccm" {
   # Versioning policy at https://github.com/hetznercloud/hcloud-cloud-controller-manager#versioning-policy
   count = var.hccm_enable ? 1 : 0
   depends_on = [
-    k0s_cluster.k0s1,
+    k0s_cluster.k0s,
     local_file.kubeconfig,
     terraform_data.hcloud_token,
   ]
@@ -86,7 +74,7 @@ resource "helm_release" "hcloud-csi-driver" {
   # Versioning policy at https://github.com/hetznercloud/csi-driver/blob/main/docs/kubernetes/README.md#versioning-policy
   count = var.hcsi_enable ? 1 : 0
   depends_on = [
-    k0s_cluster.k0s1,
+    k0s_cluster.k0s,
     local_file.kubeconfig,
     terraform_data.hcloud_token,
     helm_release.hccm,
@@ -103,7 +91,7 @@ resource "helm_release" "hcloud-csi-driver" {
 resource "helm_release" "kube-stack-prometheus" {
   count = var.prometheus_enable ? 1 : 0
   depends_on = [
-    k0s_cluster.k0s1,
+    k0s_cluster.k0s,
     local_file.kubeconfig,
   ]
   name       = "prometheus"
