@@ -21,11 +21,12 @@ module "worker_ips" {
 module "controller_ips" {
   source = "./modules/network"
 
-  amount      = var.controller_count
-  role        = "controller"
-  domain      = var.domain
-  enable_ipv4 = var.enable_ipv4
-  enable_ipv6 = var.enable_ipv6
+  amount          = var.controller_count
+  role            = "controller"
+  domain          = var.domain
+  enable_ipv4     = var.enable_ipv4
+  enable_ipv6     = var.enable_ipv6
+  enable_balancer = var.balance_control_plane
 }
 
 module "workers" {

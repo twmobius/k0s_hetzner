@@ -11,3 +11,10 @@ output "address_ids" {
     ipv6 = hcloud_primary_ip.ipv6.*.id,
   }
 }
+
+output "lb_addresses" {
+  value = {
+    ipv4 = hcloud_load_balancer.lb.*.ipv4,
+    ipv6 = hcloud_load_balancer.lb.*.ipv6,
+  }
+}

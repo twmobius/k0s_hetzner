@@ -44,3 +44,39 @@ variable "datacenter" {
     error_message = "Unsupported datacenter provided"
   }
 }
+
+variable "enable_balancer" {
+  type        = bool
+  description = "Whether a balancer should be allocated"
+  default     = false
+}
+
+variable "balancer_type" {
+  type        = string
+  description = "The load balancer type to deploy in front of the created IPs"
+  default     = "lb11"
+  validation {
+    condition     = can(regex("lb[123]1", var.balancer_type))
+    error_message = "Unsupported load balancer type provided"
+  }
+}
+
+variable "balanced_services" {
+  type        = list(number)
+  description = "The ports that will get load balanced. NOTE: currently listen and dest port need to be the same"
+  default     = [6443, 8132, 9443]
+  validation {
+    condition     = length(var.balanced_services) > 0
+    error_message = "Empty port list supplied"
+  }
+}
+
+variable "balanced_protocol" {
+  type        = string
+  description = "The load balanced protocol"
+  default     = "tcp"
+  validation {
+    condition     = can(regex("(tcp|http|https)", var.balanced_protocol))
+    error_message = "Unsupported load balanced protocol provided"
+  }
+}

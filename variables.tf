@@ -22,7 +22,6 @@ variable "hcsi_encryption_key" {
   default     = ""
 }
 
-
 variable "balance_control_plane" {
   type        = bool
   description = "Whether the control plane will be load balanced. Needs > 1 controller"
