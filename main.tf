@@ -9,7 +9,7 @@ resource "hcloud_ssh_key" "default" {
 }
 
 module "worker_ips" {
-  source = "./modules/primary_ip"
+  source = "./modules/network"
 
   amount      = var.worker_count
   role        = "worker"
@@ -19,7 +19,7 @@ module "worker_ips" {
 }
 
 module "controller_ips" {
-  source = "./modules/primary_ip"
+  source = "./modules/network"
 
   amount      = var.controller_count
   role        = "controller"
