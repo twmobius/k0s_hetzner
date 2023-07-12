@@ -1,22 +1,14 @@
 # k0s resource to create a cluster and store a kubeconfig file
-resource "k0s_cluster" "k0s1" {
-  depends_on = [
-    hcloud_load_balancer.cp_load_balancer,
-    hcloud_load_balancer_service.cp_load_balancer_kubernetes_service,
-    hcloud_load_balancer_target.cp_load_balancer_target
-  ]
+resource "k0s_cluster" "k0s" {
   name    = var.domain
   version = var.k0s_version
-  config = templatefile("templates/k0s.tftpl", {
-    controller_lb_address = local.cp_balanced_controller_count == 0 ? "" : hcloud_load_balancer.cp_load_balancer[0].ipv4,
-    controller_ip_addresses = concat(
-      hcloud_primary_ip.controller_ipv4.*.ip_address,
-      hcloud_primary_ip.controller_ipv6.*.ip_address,
-    )
+  config = templatefile("modules/k0s/templates/k0s.tftpl", {
+    controller_lb_address   = length(var.cp_balancer_ips) > 0 ? var.cp_balancer_ips[0] : "",
+    controller_ip_addresses = var.controller_ips,
   })
   hosts = concat(
     [
-      for address in hcloud_server.controller.*.ipv4_address :
+      for address in var.controller_ips :
       {
         role        = var.controller_role
         no_taints   = var.controller_role == "controller+worker" ? true : false
@@ -33,7 +25,7 @@ resource "k0s_cluster" "k0s1" {
       }
     ],
     [
-      for address in hcloud_server.worker.*.ipv4_address :
+      for address in var.worker_ips :
       {
         role        = "worker"
         environment = { "ROLE" = "worker" }
@@ -55,5 +47,5 @@ resource "k0s_cluster" "k0s1" {
 resource "local_file" "kubeconfig" {
   filename        = "kubeconfig-${var.domain}"
   file_permission = "0600"
-  content         = nonsensitive(k0s_cluster.k0s1.kubeconfig)
+  content         = nonsensitive(k0s_cluster.k0s.kubeconfig)
 }

@@ -19,7 +19,8 @@ packages:
 # Pre-populate (before ferm is even installed) ferm configuration file to allow
 # accessing the API
 write_files:
-  - path: /etc/ferm/ferm.d/k8s-api
+  %{ for name, rule in firewall_rules }
+  - path: /etc/ferm/ferm.d/${ name }
     permissions: "0640"
     owner: "root:root"
     content: |
@@ -27,24 +28,11 @@ write_files:
         table filter {
           chain INPUT {
             # allow k8s api connections
-            proto tcp dport 6443 ACCEPT;
-            # allow:
-            # etcd: 2379/tcp, 2380/tcp
-            # kuber-router BGP: 179/tcp
-            # Calico VXLAN overlay: 4789/udp. This one is being taken care for by Calico itself
-            # kubelet 10250/tcp
-            # kube-proxy 10249/tcp .This is for prometheus
-            # k0s-api 9443/tcp
-            # konnectivity 8132/tcp, 8133/tcp
-            # node-exporter 9100/tcp. This is for prometheus
-            %{ if controller_lb_addresses != "" }
-            # Control Plane Load Balancer
-            saddr (${controller_lb_addresses}) proto tcp dport (6443 8132 9443) ACCEPT;
-            %{ endif }
-            saddr (${ip_addresses}) proto tcp dport (179 2380 8132 8133 9100 9443 10249 10250) ACCEPT;
+            saddr (${rule.cidrs}) proto ${rule.proto} dport (${rule.ports}) ACCEPT;
           }
         }
       }
+  %{ endfor }
 # Don't allow SSH password auth, only ssh keys
 ssh_pwauth: false
 # Don't expire passwords, hetzner is creating a very strong one at the
