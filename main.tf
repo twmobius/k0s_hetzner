@@ -149,13 +149,13 @@ module "k0s" {
   hcsi_encryption_key = var.hcsi_encryption_key
   prometheus_enable   = var.prometheus_enable
   ssh_priv_key_path   = var.ssh_priv_key_path
-  worker_ips = concat(
-    module.workers.addresses["ipv4"],
-    module.workers.addresses["ipv6"],
+  worker_ips = (var.enable_ipv4 ?
+    module.workers.addresses["ipv4"] :
+    module.workers.addresses["ipv6"]
   )
-  controller_ips = concat(
-    module.controllers.addresses["ipv4"],
-    module.controllers.addresses["ipv6"],
+  controller_ips = (var.enable_ipv4 ?
+    module.controllers.addresses["ipv4"] :
+    module.controllers.addresses["ipv6"]
   )
   cp_balancer_ips = concat(
     module.controller_ips.lb_addresses["ipv4"],

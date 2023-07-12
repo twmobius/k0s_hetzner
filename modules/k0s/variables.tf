@@ -73,12 +73,12 @@ variable "cp_balancer_ips" {
 
 variable "worker_ips" {
   type        = list(string)
-  description = "A list of IPv4/IPv addresses"
+  description = "A list of IPv4/IPv6 addresses"
   default     = []
 }
 
 variable "controller_ips" {
   type        = list(string)
-  description = "A list of IPv4/IPv addresses"
+  description = "A list of IPv4/IPv6 addresses"
   default     = []
 }
