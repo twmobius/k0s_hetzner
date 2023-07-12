@@ -141,10 +141,6 @@ module "controllers" {
 
 module "k0s" {
   source = "./modules/k0s"
-  depends_on = [
-    module.workers,
-    module.controllers,
-  ]
 
   domain              = var.domain
   hcloud_token        = var.hcloud_token
@@ -154,12 +150,12 @@ module "k0s" {
   prometheus_enable   = var.prometheus_enable
   ssh_priv_key_path   = var.ssh_priv_key_path
   worker_ips = concat(
-    module.worker_ips.addresses["ipv4"],
-    module.worker_ips.addresses["ipv6"],
+    module.workers.addresses["ipv4"],
+    module.workers.addresses["ipv6"],
   )
   controller_ips = concat(
-    module.controller_ips.addresses["ipv4"],
-    module.controller_ips.addresses["ipv6"],
+    module.controllers.addresses["ipv4"],
+    module.controllers.addresses["ipv6"],
   )
   cp_balancer_ips = concat(
     module.controller_ips.lb_addresses["ipv4"],
@@ -170,7 +166,7 @@ module "k0s" {
     module.controller_ips.addresses["ipv4"],
     module.controller_ips.addresses["ipv6"],
     ) : concat(
-    module.worker_ips.addresses["ipv4"],
-    module.worker_ips.addresses["ipv6"],
+    module.workers.addresses["ipv4"],
+    module.workers.addresses["ipv6"],
   )
 }

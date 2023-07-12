@@ -1,7 +1,7 @@
-output "controller_ip_addreses" {
-  value = module.controller_ips.addresses
+output "controller_ip_addresses" {
+  value = module.controllers.addresses
 }
 
-output "worker_ip_addreses" {
-  value = module.worker_ips.addresses
+output "worker_ip_addresses" {
+  value = module.workers.addresses
 }
