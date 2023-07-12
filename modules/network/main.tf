@@ -57,6 +57,9 @@ resource "hcloud_load_balancer" "lb" {
   algorithm {
     type = "round_robin"
   }
+  labels = {
+    "role" : local.role
+  }
 }
 
 resource "hcloud_load_balancer_service" "service" {
@@ -67,18 +70,11 @@ resource "hcloud_load_balancer_service" "service" {
   destination_port = var.balanced_services[count.index]
 }
 
-resource "hcloud_load_balancer_target" "target_v4" {
+resource "hcloud_load_balancer_target" "target" {
   count            = local.balancer_count
-  type             = "ip"
+  type             = "label_selector"
   load_balancer_id = hcloud_load_balancer.lb[0].id
-  ip               = hcloud_primary_ip.ipv4[count.index].ip_address
-}
-
-resource "hcloud_load_balancer_target" "target_v6" {
-  count            = local.balancer_count
-  type             = "ip"
-  load_balancer_id = hcloud_load_balancer.lb[0].id
-  ip               = hcloud_primary_ip.ipv6[count.index].ip_address
+  label_selector   = "role=${local.role}"
 }
 
 # Balancer reverse DNS

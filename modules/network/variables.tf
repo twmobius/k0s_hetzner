@@ -76,7 +76,7 @@ variable "balanced_protocol" {
   description = "The load balanced protocol"
   default     = "tcp"
   validation {
-    condition     = can(regex("(tcp|http|https)", var.balanced_protocol))
-    error_message = "Unsupported load balanced protocol provided"
+    condition     = can(regex("(tcp)", var.balanced_protocol))
+    error_message = "Unsupported load balanced protocol provided. We only support TCP for now"
   }
 }
