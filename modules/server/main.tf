@@ -45,8 +45,8 @@ resource "hcloud_server" "server" {
   public_net {
     ipv4_enabled = local.enable_ipv4
     ipv6_enabled = local.enable_ipv6
-    ipv4         = var.ip_address_ids["ipv4"][count.index]
-    ipv6         = var.ip_address_ids["ipv6"][count.index]
+    ipv4         = local.enable_ipv4 ? var.ip_address_ids["ipv4"][count.index] : null
+    ipv6         = local.enable_ipv6 ? var.ip_address_ids["ipv6"][count.index] : null
   }
   labels = {
     "role" : local.role,
