@@ -93,7 +93,7 @@ variable "worker_server_datacenter" {
   description = "The Hetzner datacenter name to create the server in. Values: nbg1-dc3, fsn1-dc14, hel1-dc2, ash-dc1 or hil-dc1"
   default     = "fsn1-dc14"
   validation {
-    condition     = can(regex("\\w{1,}-dc[0-9]{1,}", var.worker_server_datacenter))
+    condition     = contains(["nbg1-dc3", "hel1-dc2", "fsn1-dc14", "ash-dc1", "hil-dc1"], var.worker_server_datacenter)
     error_message = "Unsupported datacenter provided"
   }
 }
