@@ -52,11 +52,11 @@ resource "hcloud_server" "server" {
     "role" : local.role,
   }
 
-  # Note: this will need to be reworked to apply to non-ipv4 and non public IP situations
+  # TODO: Add support for doing this over private networks
   connection {
     type        = "ssh"
     user        = "root"
-    host        = self.ipv4_address
+    host        = local.enable_ipv4 ? self.ipv4_address : (local.enable_ipv6 ? self.ipv6_address : null)
     private_key = file(var.ssh_priv_key_path)
   }
 
