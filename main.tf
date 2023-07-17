@@ -9,6 +9,11 @@ provider "helm" {
   }
 }
 
+locals {
+  controller_count = var.controller_role == "single" ? 1 : var.controller_count
+  worker_count     = var.controller_role == "single" ? 0 : var.worker_count
+}
+
 resource "hcloud_ssh_key" "default" {
   name       = "hetzner"
   public_key = var.ssh_pub_key
@@ -17,7 +22,7 @@ resource "hcloud_ssh_key" "default" {
 module "worker_ips" {
   source = "./modules/network"
 
-  amount      = var.worker_count
+  amount      = local.worker_count
   role        = "worker"
   domain      = var.domain
   enable_ipv4 = var.enable_ipv4
@@ -27,7 +32,7 @@ module "worker_ips" {
 module "controller_ips" {
   source = "./modules/network"
 
-  amount          = var.controller_count
+  amount          = local.controller_count
   role            = "controller"
   domain          = var.domain
   enable_ipv4     = var.enable_ipv4
@@ -38,7 +43,7 @@ module "controller_ips" {
 module "workers" {
   source = "./modules/server"
 
-  amount            = var.worker_count
+  amount            = local.worker_count
   type              = var.worker_server_type
   image             = var.worker_server_image
   datacenter        = var.worker_server_datacenter
@@ -94,7 +99,7 @@ module "workers" {
 module "controllers" {
   source = "./modules/server"
 
-  amount            = var.controller_count
+  amount            = local.controller_count
   type              = var.controller_server_type
   image             = var.controller_server_image
   datacenter        = var.controller_server_datacenter
