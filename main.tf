@@ -10,13 +10,30 @@ provider "helm" {
 }
 
 locals {
-  controller_count = var.controller_role == "single" ? 1 : var.controller_count
-  worker_count     = var.controller_role == "single" ? 0 : var.worker_count
+  controller_count  = var.controller_role == "single" ? 1 : var.controller_count
+  worker_count      = var.controller_role == "single" ? 0 : var.worker_count
+  create_keys       = (var.ssh_pub_key == null || var.ssh_priv_key_path == null) ? true : false
+  ssh_priv_key_path = var.ssh_priv_key_path == null ? "id_ed25519_${var.domain}" : var.ssh_priv_key_path
+}
+
+# ED25519 key
+resource "tls_private_key" "ed25519" {
+  count     = local.create_keys ? 1 : 0
+  algorithm = "ED25519"
+}
+
+resource "local_file" "ssh_priv_key_path" {
+  count           = local.create_keys ? 1 : 0
+  filename        = local.ssh_priv_key_path
+  file_permission = "0600"
+  content         = nonsensitive(tls_private_key.ed25519[0].private_key_openssh)
 }
 
 resource "hcloud_ssh_key" "default" {
-  name       = "hetzner"
-  public_key = var.ssh_pub_key
+  name = "hetzner"
+  # We depend on the local_file because we want it created, before we create servers
+  depends_on = [local_file.ssh_priv_key_path]
+  public_key = local.create_keys ? tls_private_key.ed25519[0].public_key_openssh : var.ssh_pub_key
 }
 
 module "worker_ips" {
@@ -49,7 +66,7 @@ module "workers" {
   datacenter        = var.worker_server_datacenter
   role              = "worker"
   ssh_pub_key_id    = hcloud_ssh_key.default.id
-  ssh_priv_key_path = var.ssh_priv_key_path
+  ssh_priv_key_path = local.ssh_priv_key_path
   domain            = var.domain
   ip_address_ids    = module.worker_ips.address_ids
   firewall_rules = {
@@ -105,7 +122,7 @@ module "controllers" {
   datacenter        = var.controller_server_datacenter
   role              = var.controller_role
   ssh_pub_key_id    = hcloud_ssh_key.default.id
-  ssh_priv_key_path = var.ssh_priv_key_path
+  ssh_priv_key_path = local.ssh_priv_key_path
   domain            = var.domain
   hostname          = var.single_controller_hostname
   ip_address_ids    = module.controller_ips.address_ids
@@ -153,7 +170,7 @@ module "k0s" {
   hcsi_enable         = var.hcsi_enable
   hcsi_encryption_key = var.hcsi_encryption_key
   prometheus_enable   = var.prometheus_enable
-  ssh_priv_key_path   = var.ssh_priv_key_path
+  ssh_priv_key_path   = local.ssh_priv_key_path
   worker_ips = (var.enable_ipv4 ?
     module.workers.addresses["ipv4"] :
     module.workers.addresses["ipv6"]

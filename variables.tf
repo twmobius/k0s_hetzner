@@ -36,13 +36,15 @@ variable "prometheus_enable" {
 
 variable "ssh_pub_key" {
   type        = string
-  description = "Public SSH key for connecting to servers"
+  description = "Public SSH key for connecting to servers. If left empty, terraform will create a key pair for you"
+  default     = null
 }
 
 variable "ssh_priv_key_path" {
   type        = string
-  description = "The private part of the above"
+  description = "The private SSH for connecting to servers. If left empty, terraform will create a key pair for you"
   sensitive   = true
+  default     = null
 }
 
 variable "domain" {

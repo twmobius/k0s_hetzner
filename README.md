@@ -10,7 +10,10 @@ If you use Windows, go get a linux machine.
 
 Get terraform, clone this repo with git, cd into the dir
 
-Create a new SSH key
+You have 2 options now. Either rely on terraform to create SSH keys for you or
+create a new SSH key yourself.  Per terraform [docs for TLS provider](https://registry.terraform.io/providers/hashicorp/tls/latest/docs#secrets-and-terraform-state)
+the former is mostly for development purposes, so if you plan to use this for
+production, create an SSH key pair on your own. You can do so with the following command
 ```
 $ ssh-keygen -t ed25519 -f id_ed25519_k0s_hetzner_poc
 ```
@@ -20,12 +23,16 @@ Now, go to [Hetzner Cloud console](console.hetzner.cloud), create project, go to
 Create a file named terraform.tfvars and put inside the Token from Hetzner's portal and the public key as below. Note that this file is git-ignored
 ```
 hcloud_token = "API_TOKEN_HERE"
-ssh_pub_key = "SSH_KEY_HERE"
-ssh_priv_key_path = "path_to_priv_key_file"
-domain            = "example.com"
+domain       = "example.com"
 ```
 
-This are the absolute necessities, look below for all the tunables that you can configure using this file
+These are the absolute necessities, look below for all the tunables that you can configure using this file
+
+If you have created your own SSH key pair, add the following in that file
+```
+ssh_pub_key       = "SSH_KEY_HERE"
+ssh_priv_key_path = "path_to_priv_key_file"
+```
 
 Now, run the following to get the providers
 ```
@@ -47,7 +54,7 @@ Once you are sure that the demons have been exorcised create the resources
 $ SSH_KNOWN_HOSTS=/dev/null terraform apply -auto-approve
 ```
 
-Wait for the output and fetch the IPv6 and IPv4 addresses. Based on what you have of the 2, ssh to the node.
+Wait for the output and fetch the IPv6 and IPv4 addresses. Based on what you have of the 2, ssh to the nodes.
 Note that I am on purpose redirecting to /dev/null the host key as I don't want to keep it around for this PoC.
 
 ```
@@ -61,7 +68,7 @@ k0s itself, or via the kubeconfig file and standard tooling
 
 ### Internal use
 
-k0s is distribution of Kubernetes that has some interesting properties. Some basic commands:
+k0s is a distribution of Kubernetes that has some interesting properties. Some basic commands:
 
 List nodes
 ```
@@ -89,7 +96,7 @@ Delete pods
 # k0s kubectl delete pods --all
 ```
 
-And so on.
+And so on. All of these are meant to be run from a controller node.
 
 ### Standard tooling
 
