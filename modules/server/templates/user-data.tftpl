@@ -10,7 +10,8 @@ apt:
 # Update all packages
 package_update: true
 package_upgrade: true
-package_reboot_if_required: true
+# We don't upgrade even if needed, as it breaks provisioners
+package_reboot_if_required: false
 # Install ferm for firewalling purposes, standard ferm firewalling is pretty strict
 # Install curl cause we 'll need it later
 packages:
