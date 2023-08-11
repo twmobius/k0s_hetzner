@@ -194,3 +194,6 @@ Other settings you can set in terraform.tfvars
 - [x] Hetzner right kinda leads us to use the root user. We apparently can use cloud-inits user-data to get away from that. Apparently it won't help much, stick with what we got
 - [x] Write more docs
 - [x] Support Debian 12
+- [ ] Upstream amended CSI driver helm chart
+- [ ] Move to Calico Host Endpoints and GlobalNetwork policies and away from ferm, as it causes needless host recreations due to how cloud-init is applied
+- [ ] Test PVC moves between nodes
