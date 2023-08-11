@@ -195,5 +195,7 @@ Other settings you can set in terraform.tfvars
 - [x] Write more docs
 - [x] Support Debian 12
 - [ ] Upstream amended CSI driver helm chart
-- [ ] Move to Calico Host Endpoints and GlobalNetwork policies and away from ferm, as it causes needless host recreations due to how cloud-init is applied
+- [ ] Replace ferm:
+  - [ ] workers: Move to Calico Host Endpoints and GlobalNetwork policies
+  - [ ] controllers: Move to hetzner's firewalling functionality.
 - [ ] Test PVC moves between nodes
