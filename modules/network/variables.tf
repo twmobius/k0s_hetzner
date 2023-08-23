@@ -106,7 +106,7 @@ variable "network_subnet_type" {
   default     = "cloud"
   validation {
     condition     = contains(["cloud", "vswitch"], var.network_subnet_type)
-    error_message = "Unsupported load balanced protocol provided. We only support TCP for now"
+    error_message = "Unsupported subnet type provided"
   }
 }
 
@@ -118,6 +118,10 @@ variable "network_vswitch_id" {
 
 variable "network_zone" {
   type        = string
-  description = "The Hetzner network zone. Stick to eu-central for now"
+  description = "The Hetzner network zone. Default to eu-central."
   default     = "eu-central"
+  validation {
+    condition     = contains(["eu-central", "us-east", "us-west"], var.network_zone)
+    error_message = "Unsupported network zone"
+  }
 }

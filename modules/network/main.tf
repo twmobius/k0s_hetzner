@@ -53,8 +53,7 @@ resource "hcloud_load_balancer" "lb" {
   count              = local.balancer_count
   name               = "lb"
   load_balancer_type = var.balancer_type
-  # TODO: fix location
-  location = "fsn1"
+  network_zone       = var.network_zone
   algorithm {
     type = "round_robin"
   }
