@@ -5,13 +5,14 @@ locals {
   balancer_count         = (local.role == "single" || !var.enable_balancer) ? 0 : 1
   balanced_port_count    = local.balancer_count == 0 ? 0 : length(var.balanced_services)
   balancer_privnet_count = (var.enable_network && local.balancer_count > 0) ? 1 : 0
+  basename               = var.hostname != null ? var.hostname : local.role
 }
 
 # Create Primary IPs for servers. We need this to happen in a different step
 # from creating the servers in order to populate firewall rules
 resource "hcloud_primary_ip" "ipv4" {
   count         = local.ipv4_count
-  name          = var.hostname != null ? var.hostname : "ipv4-${local.role}-${count.index}"
+  name          = format("ipv4-%s-%s.%s", local.basename, count.index, var.domain)
   type          = "ipv4"
   datacenter    = var.datacenter
   assignee_type = "server"
@@ -23,7 +24,7 @@ resource "hcloud_primary_ip" "ipv4" {
 
 resource "hcloud_primary_ip" "ipv6" {
   count         = local.ipv6_count
-  name          = var.hostname != null ? var.hostname : "ipv6-${local.role}-${count.index}"
+  name          = format("ipv6-%s-%s.%s", local.basename, count.index, var.domain)
   type          = "ipv6"
   datacenter    = var.datacenter
   assignee_type = "server"
@@ -38,14 +39,14 @@ resource "hcloud_rdns" "ipv4" {
   count         = local.ipv4_count
   primary_ip_id = hcloud_primary_ip.ipv4[count.index].id
   ip_address    = hcloud_primary_ip.ipv4[count.index].ip_address
-  dns_ptr       = format("%s.%s", hcloud_primary_ip.ipv4[count.index].name, var.domain)
+  dns_ptr       = format("%s-%s.%s", local.basename, count.index, var.domain)
 }
 
 resource "hcloud_rdns" "ipv6" {
   count         = local.ipv6_count
   primary_ip_id = hcloud_primary_ip.ipv6[count.index].id
   ip_address    = hcloud_primary_ip.ipv6[count.index].ip_address
-  dns_ptr       = format("%s.%s", hcloud_primary_ip.ipv6[count.index].name, var.domain)
+  dns_ptr       = format("%s-%s.%s", local.basename, count.index, var.domain)
 }
 
 # Balancer section
