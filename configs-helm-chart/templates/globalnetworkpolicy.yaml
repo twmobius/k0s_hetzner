@@ -1,3 +1,21 @@
+apiVersion: crd.projectcalico.org/v1
+kind: GlobalNetworkPolicy
+metadata:
+  name: allow-egress-and-all-icmp
+spec:
+  order: 0
+  selector: has(k0s-worker)
+  types:
+    - Egress
+    - Ingress
+  egress:
+    - action: Allow
+  ingress:
+    - action: Allow
+      protocol: ICMP
+    - action: Allow
+      protocol: ICMPv6
+---
 {{- range $policy, $spec := .Values.GlobalNetworkPolicies }}
 apiVersion: crd.projectcalico.org/v1
 kind: GlobalNetworkPolicy
