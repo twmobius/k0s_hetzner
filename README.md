@@ -204,4 +204,4 @@ Other settings you can set in terraform.tfvars
 - [x] Replace ferm:
   - [x] workers: Move to Calico Host Endpoints and GlobalNetwork policies
   - [x] controllers: Move to hetzner's firewalling functionality.
-- [ ] Test PVC moves between nodes
+- [x] Test PVC moves between nodes
