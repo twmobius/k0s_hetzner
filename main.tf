@@ -196,8 +196,7 @@ module "controllers" {
 # the data from the server module
 #
 locals {
-  #TODO: Take into account controller+worker too
-  externalIPs = var.controller_role == "single" ? flatten(
+  externalIPs = (var.controller_role == "single" || var.controller_role == "controller+worker") ? flatten(
     [
       for _, addresses in module.controllers.addresses :
       compact(values(addresses))
