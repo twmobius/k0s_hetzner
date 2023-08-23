@@ -212,6 +212,7 @@ module "k0s" {
   source = "./modules/k0s"
 
   domain               = var.domain
+  controller_role      = var.controller_role
   hcloud_token         = var.hcloud_token
   hccm_enable          = var.hccm_enable
   hcsi_enable          = var.hcsi_enable
