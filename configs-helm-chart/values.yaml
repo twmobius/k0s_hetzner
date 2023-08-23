@@ -16,12 +16,6 @@ HostEndpoints:
   #     - profile1
   #     - profile2
 GlobalNetworkPolicies:
-  icmp-all:
-    proto: icmp
-    port: null
-    cidrs:
-      - 0.0.0.0/0
-      - ::/0
   # policyname:
   #   proto: TCP
   #   port: 22
