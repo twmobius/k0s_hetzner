@@ -89,18 +89,20 @@ resource "helm_release" "hcloud-csi-driver" {
 }
 
 locals {
+  controller_hpes = var.controller_role == "controller+worker" ? var.controller_addresses : {}
+  hpes = {
+    for hpe, v in merge(local.controller_hpes, var.worker_addresses) :
+    hpe => {
+      expectedIPs = compact([
+        v["public_ipv4"],
+        v["public_ipv6"],
+        v["private_ipv4"],
+      ])
+    }
+  }
   configs_workers = {
     HostEndpoints = {
-      workers = {
-        for worker, v in var.worker_addresses :
-        worker => {
-          expectedIPs = compact([
-            v["public_ipv4"],
-            v["public_ipv6"],
-            v["private_ipv4"],
-          ])
-        }
-      }
+      workers = local.hpes
     }
   }
   gnp = {

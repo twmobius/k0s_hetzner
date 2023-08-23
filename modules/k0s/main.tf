@@ -17,8 +17,8 @@ resource "k0s_cluster" "k0s" {
     [
       for host, addresses in var.controller_addresses :
       {
-        role        = var.controller_role
-        no_taints   = var.controller_role == "controller+worker" ? true : false
+        role      = var.controller_role
+        no_taints = var.controller_role == "controller+worker" ? true : false
         install_flags = [
           "--enable-metrics-scraper",
         ]
@@ -38,7 +38,7 @@ resource "k0s_cluster" "k0s" {
     [
       for host, addresses in var.worker_addresses :
       {
-        role        = "worker"
+        role = "worker"
         install_flags = var.hccm_enable ? [
           "--enable-cloud-provider",
           "--kubelet-extra-args=\"--cloud-provider=external\""

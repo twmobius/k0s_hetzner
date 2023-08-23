@@ -68,6 +68,9 @@ locals {
     module.worker_ips.addresses["ipv6cidr"],
     module.worker_ips.addresses["ipv4cidr"],
     var.enable_private_network ? [var.network_subnet_ip_range] : [],
+    var.controller_role == "controller+worker" ? concat(
+      module.controller_ips.addresses["ipv6cidr"],
+    module.controller_ips.addresses["ipv4cidr"]) : []
   ))
   controller_cidrs = compact(concat(
     module.controller_ips.addresses["ipv6cidr"],
@@ -142,7 +145,7 @@ locals {
     k0s-api = {
       proto = "tcp",
       port  = "9443",
-      cidrs = concat(local.worker_cidrs, local.controller_cidrs),
+      cidrs = toset(concat(local.worker_cidrs, local.controller_cidrs)),
     }
   }
   # If the controller role is "controller+worker" then we are going to rely exclusively on Calico HostEndpoints
