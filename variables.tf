@@ -206,3 +206,13 @@ variable "network_zone" {
   description = "The Hetzner network zone. Stick to eu-central for now"
   default     = "eu-central"
 }
+
+variable "extra_workers" {
+  type = map(object({
+    public_ipv4  = optional(string),
+    public_ipv6  = optional(string),
+    private_ipv4 = optional(string),
+  }))
+  description = "A map of objects containing IPv4/IPv6 public and private addresses. Use it to add workers that aren't terraform resources, e.g. baremetal servers"
+  default     = {}
+}
