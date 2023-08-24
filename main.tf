@@ -210,6 +210,9 @@ locals {
       compact(values(addresses))
     ]
   )
+
+  worker_addresses = merge(module.workers.addresses, var.extra_workers)
+  hccm_enable      = length(var.extra_workers) > 0 ? false : var.hccm_enable
 }
 module "k0s" {
   source = "./modules/k0s"
@@ -217,13 +220,13 @@ module "k0s" {
   domain               = var.domain
   controller_role      = var.controller_role
   hcloud_token         = var.hcloud_token
-  hccm_enable          = var.hccm_enable
+  hccm_enable          = local.hccm_enable
   hcsi_enable          = var.hcsi_enable
   hcsi_encryption_key  = var.hcsi_encryption_key
   prometheus_enable    = var.prometheus_enable
   ssh_priv_key_path    = local.ssh_priv_key_path
   controller_addresses = module.controllers.addresses
-  worker_addresses     = module.workers.addresses
+  worker_addresses     = local.worker_addresses
   firewall_rules       = local.worker_firewall_rules
 
   cp_balancer_ips = concat(

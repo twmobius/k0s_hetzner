@@ -205,3 +205,4 @@ Other settings you can set in terraform.tfvars
   - [x] workers: Move to Calico Host Endpoints and GlobalNetwork policies
   - [x] controllers: Move to hetzner's firewalling functionality.
 - [x] Test PVC moves between nodes
+- [x] Support non terraform managed (e.g. baremetal) workers
