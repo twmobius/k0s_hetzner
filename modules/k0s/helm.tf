@@ -42,25 +42,13 @@ resource "helm_release" "ingress-nginx" {
   }
 }
 
-resource "terraform_data" "hcloud_token" {
-  count = (var.hccm_enable || var.hcsi_enable) ? 1 : 0
-  depends_on = [
-    k0s_cluster.k0s,
-    local_file.kubeconfig,
-  ]
-  provisioner "local-exec" {
-    command    = "kubectl --kubeconfig=kubeconfig-${var.domain} -n kube-system create secret generic hcloud --from-literal=token=${var.hcloud_token}"
-    on_failure = continue
-  }
-}
-
 resource "helm_release" "hccm" {
   # Versioning policy at https://github.com/hetznercloud/hcloud-cloud-controller-manager#versioning-policy
   count = var.hccm_enable ? 1 : 0
   depends_on = [
     k0s_cluster.k0s,
     local_file.kubeconfig,
-    terraform_data.hcloud_token,
+    helm_release.terraform-hcloud-k0s-configs,
   ]
   name       = "hccm"
   repository = "https://charts.hetzner.cloud"
@@ -76,8 +64,8 @@ resource "helm_release" "hcloud-csi-driver" {
   depends_on = [
     k0s_cluster.k0s,
     local_file.kubeconfig,
-    terraform_data.hcloud_token,
     helm_release.hccm,
+    helm_release.terraform-hcloud-k0s-configs,
   ]
   name      = "hcloud-csi-driver"
   chart     = "./hcloud-csi-driver-helm-chart"
@@ -108,6 +96,7 @@ locals {
   gnp = {
     GlobalNetworkPolicies = var.firewall_rules
   }
+  hcloud_token = (var.hccm_enable || var.hcsi_enable) ? var.hcloud_token : null
 }
 
 resource "helm_release" "terraform-hcloud-k0s-configs" {
@@ -122,6 +111,10 @@ resource "helm_release" "terraform-hcloud-k0s-configs" {
     yamlencode(local.configs_workers),
     yamlencode(local.gnp),
   ]
+  set {
+    name  = "hcloud_token"
+    value = local.hcloud_token
+  }
 }
 
 resource "helm_release" "kube-stack-prometheus" {
