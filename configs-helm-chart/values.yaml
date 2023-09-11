@@ -21,3 +21,5 @@ GlobalNetworkPolicies:
   #   port: 22
   #   cidrs:
   #     - 10.10.10.10/32
+  #
+#hcloud_token:
